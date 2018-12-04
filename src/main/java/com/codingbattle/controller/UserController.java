@@ -13,7 +13,7 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("userId") String id) {
+    public User getUser(@PathVariable String id) {
         return userRepository.findOne(id);
     }
 
