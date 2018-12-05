@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CompilationService {
 
-    String compile(String code) throws Exception;
+    String compile(String code, String gameName) throws Exception;
 }

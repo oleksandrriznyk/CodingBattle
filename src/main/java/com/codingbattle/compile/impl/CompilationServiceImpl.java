@@ -13,20 +13,21 @@ import java.io.OutputStreamWriter;
 @Service
 public class CompilationServiceImpl implements CompilationService {
 
+    private static final String TEMP_DIR = "src/main/temp/";
+    private static final String EXTENSION_JAVA = ".java";
+
     @Autowired
     private DynamicCompiler dynamicCompiler;
 
-
-
     @Override
-    public String compile(String sourceCode) throws Exception{
-        String sourcePath = createFileFromSourceCode(sourceCode);
-        return dynamicCompiler.doEvil(sourcePath);
+    public String compile(String sourceCode, String gameName) throws Exception {
+        String sourcePath = createFileFromSourceCode(sourceCode, gameName);
+        return dynamicCompiler.doEvil(sourcePath, gameName);
 
     }
 
-    private String createFileFromSourceCode(String sourceCode) throws IOException {
-        String sourcePath = "src/main/temp/Test.java";
+    private String createFileFromSourceCode(String sourceCode, String gameName) throws IOException {
+        String sourcePath = TEMP_DIR + gameName + EXTENSION_JAVA;
         File file = new File(sourcePath);
         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
         writer.write(sourceCode);

@@ -15,6 +15,6 @@ public class CompilationController {
 
     @PostMapping("/test")
     public String compile(@RequestBody SourceCodeDto dto) throws Exception {
-        return compilationService.compile(dto.getSource());
+        return compilationService.compile(dto.getSource(), dto.getGameName());
     }
 }

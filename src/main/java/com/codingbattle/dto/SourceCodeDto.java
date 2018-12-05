@@ -6,4 +6,5 @@ import lombok.Data;
 public class SourceCodeDto {
 
     private String source;
+    private String gameName;
 }
