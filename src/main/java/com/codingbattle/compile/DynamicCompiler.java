@@ -1,6 +1,9 @@
 package com.codingbattle.compile;
 
 import com.codingbattle.compile.parser.service.ParseService;
+import com.codingbattle.dto.TestResultDto;
+import com.codingbattle.entity.Test;
+import com.codingbattle.entity.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +26,11 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -89,45 +97,92 @@ public class DynamicCompiler {
     }
 
     //TODO add parameters for method.invoke()
-    private String runClass(Path javaClass, String gameName)
+    private List<TestResult> runClass(Path javaClass, String gameName)
             throws ClassNotFoundException, NoSuchMethodException, MalformedURLException,
             IllegalAccessException, InstantiationException {
         URL classUrl = javaClass.getParent().toFile().toURI().toURL();
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
         Class<?> clazz = Class.forName(gameName, true, classLoader);
         Method m = clazz.getDeclaredMethod("print", typeManager.getTypes().get("int"));//TODO input parameter
-        String result;
-        String input = "12";//TODO input parameter
-        try {
-            result = m.invoke(clazz.newInstance(), (Object) parseService.parse(input, int.class/*TODO input parameter*/)).toString();
-        } catch (InvocationTargetException e) {
-            result = e.getMessage();
+        List<Test> testList = new ArrayList<>();
+        Test test = new Test();
+        test.setInputParams(Arrays.asList("1"));
+        test.setOutputParams(Arrays.asList("1"));
+        testList.add(test);
+        Test test1 = new Test();
+        test1.setInputParams(Arrays.asList("12"));
+        test1.setOutputParams(Arrays.asList("144"));
+        testList.add(test1);
+        List<TestResult> testResults = new ArrayList<>();
+
+        for (int i = 0; i < testList.size(); i++) {
+            String result;
+            try {
+                result = m.invoke(clazz.newInstance(), (Object) parseService.parse(testList.get(i).getInputParams().get(0), int.class/*TODO input parameter*/)).toString();
+                TestResult testResult = new TestResult(testList.get(i));
+                testResult.setActualResults(Arrays.asList(result));
+                testResults.add(testResult);
+            } catch (InvocationTargetException e) {
+                result = e.getMessage();
+                TestResult testResult = new TestResult(testList.get(i));
+                testResult.setActualResults(Arrays.asList(result));
+                testResults.add(testResult);
+            }
         }
-        return result;
+        checkResults(testList, testResults);
+        return testResults;
     }
 
-    public String doEvil(String sourcePath, String gameName) throws Exception {
+    private void checkResults(List<Test> tests, List<TestResult> testResults) {
+        for (int i = 0; i < tests.size(); i++) {
+            List<String> expectedResults = tests.get(i).getOutputParams();
+            List<String> actualResults = testResults.get(i).getActualResults();
+            if (compareCollections(expectedResults, actualResults)) {
+                testResults.get(i).setPassed(true);
+            }
+        }
+    }
+
+    private Boolean compareCollections(List<String> first, List<String> second) {
+        if (first.size() != second.size()) {
+            return false;
+        }
+        for (int i = 0; i < first.size(); i++) {
+            if (!first.get(i).equals(second.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public TestResultDto doEvil(String sourcePath, String gameName) throws Exception {
         String source = readCode(sourcePath);
         Path javaFile = saveSource(source, gameName);
         String str = compileSource(javaFile, gameName);
         return parseResult(str, gameName, javaFile);
     }
 
-    private String parseResult(String input, String gameName, Path javaFile) throws Exception {
-        String result;
+    private TestResultDto parseResult(String input, String gameName, Path javaFile) throws Exception {
+        TestResultDto dto = new TestResultDto();
         if (input.contains(ERROR)) {
+            String result;
             result = input.substring(input.indexOf(ERROR));
             result = result.replaceAll("(location: [^\n]*)", "");
+            dto.setStatus(result);
+
         } else {
             Path classFile = Paths.get(compileSource(javaFile, gameName));
-            result = runClass(classFile, gameName);
+            List<TestResult> testResults = runClass(classFile, gameName);
             File file = new File(classFile.toString());
+            dto.setTestResultList(testResults);
+            dto.setStatus("OK");
             String fileNameWithoutExtension = file.getName()
                     .substring(0, file.getName().indexOf("."));
             deleteFiles(fileNameWithoutExtension);
         }
-        return result;
+        return dto;
     }
+
 
     private void deleteFiles(String fileNameWithoutExtension) throws IOException {
         File javaFile = new File(TEMP_DIR + "/" + fileNameWithoutExtension +
