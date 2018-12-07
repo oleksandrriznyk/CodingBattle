@@ -2,18 +2,20 @@ package com.codingbattle.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "users")
+import java.util.UUID;
+
+@Document(collection = "sessions")
 @Data
 @AllArgsConstructor
-public class User {
+public class Session {
 
     @Id
-    private String login;
-    private String email;
-    private String password;
+    private UUID id;
+    private User playerFirst;
+    private User playerSecond;
+    private Task task;
 
 }
