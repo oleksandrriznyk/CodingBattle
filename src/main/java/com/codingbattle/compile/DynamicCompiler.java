@@ -1,5 +1,7 @@
 package com.codingbattle.compile;
 
+import com.codingbattle.compile.parser.service.ParseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.tools.JavaCompiler;
@@ -34,6 +36,12 @@ public class DynamicCompiler {
     private static final String EXTENSION_TXT = ".txt";
     private static final String EXTENSION_CLASS = ".class";
     private static final String ERROR = "error";
+
+    @Autowired
+    private TypeManager typeManager;
+
+    @Autowired
+    private ParseService parseService;
 
     private String readCode(String sourcePath) throws FileNotFoundException {
         InputStream stream = new FileInputStream(sourcePath);
@@ -70,10 +78,10 @@ public class DynamicCompiler {
 
         out.close();
         if (result == 0) {
-            String programmResult = javaFile.getParent()
+            String programResult = javaFile.getParent()
                     .resolve(gameName + EXTENSION_CLASS).toString();
             System.setErr(System.err);
-            return programmResult;
+            return programResult;
         } else {
             return new String(Files.readAllBytes(
                     Paths.get(fileName.substring(0, fileName.indexOf(".")) + EXTENSION_TXT)));
@@ -87,10 +95,11 @@ public class DynamicCompiler {
         URL classUrl = javaClass.getParent().toFile().toURI().toURL();
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
         Class<?> clazz = Class.forName(gameName, true, classLoader);
-        Method m = clazz.getDeclaredMethod("print", String.class);
+        Method m = clazz.getDeclaredMethod("print", typeManager.getTypes().get("int"));//TODO input parameter
         String result;
+        String input = "12";//TODO input parameter
         try {
-            result = m.invoke(clazz.newInstance(), "1234").toString();
+            result = m.invoke(clazz.newInstance(), (Object) parseService.parse(input, int.class/*TODO input parameter*/)).toString();
         } catch (InvocationTargetException e) {
             result = e.getMessage();
         }
@@ -108,7 +117,7 @@ public class DynamicCompiler {
         String result;
         if (input.contains(ERROR)) {
             result = input.substring(input.indexOf(ERROR));
-            result = result.replaceAll("(location: \\w\\n)", "");
+            result = result.replaceAll("(location: [^\n]*)", "");
         } else {
             Path classFile = Paths.get(compileSource(javaFile, gameName));
             result = runClass(classFile, gameName);
