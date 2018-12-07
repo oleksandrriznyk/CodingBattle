@@ -12,14 +12,16 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable("userId") String id) {
-        return userRepository.findOne(id);
+    @GetMapping("/{login}")
+    public User getUser(@PathVariable("login") String login) {
+        return userRepository.findOne(login);
     }
 
     @PostMapping
-    public User saveUser(@RequestParam(name = "userId") String id) {
-        return userRepository.save(new User(id));
+    public User saveUser(@RequestParam(name = "login") String login,
+                         @RequestParam(name = "email") String email,
+                         @RequestParam(name = "password") String password) {
+        return userRepository.save(new User(login, email, password));
     }
 
 }
