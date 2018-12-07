@@ -1,10 +1,11 @@
 package com.codingbattle.repository;
 
-import com.codingbattle.entity.User;
+import com.codingbattle.entity.Session;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends MongoRepository<User, String> {
+import java.util.UUID;
 
+@Repository
+public interface SessionRepository extends MongoRepository<Session, UUID> {
 }
