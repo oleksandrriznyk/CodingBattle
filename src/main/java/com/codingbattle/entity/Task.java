@@ -14,8 +14,11 @@ import java.util.UUID;
 public class Task {
 
     @Id
-    private UUID id;
+    private String id;
     private String taskText;
     private List<Test> test;
+    private String inputType;
+    private String methodName;
+    private String startCode;
 
 }

@@ -2,29 +2,29 @@ package com.codingbattle.entity;
 
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
 public class TestResult extends Test {
 
-    private List<String> actualResults;
+    private String actualResults;
     private Boolean isPassed = false;
 
-    public TestResult(UUID id, List<String> inputParams, List<String> outputParams) {
+    public TestResult(String id, String inputParams, String outputParams) {
         super(id, inputParams, outputParams);
     }
 
     public TestResult(Test test){
+        this.setId(test.getId());
         this.setInputParams(test.getInputParams());
         this.setOutputParams(test.getOutputParams());
     }
 
-    public List<String> getActualResults() {
+    public String getActualResults() {
         return actualResults;
     }
 
-    public void setActualResults(List<String> actualResults) {
+    public void setActualResults(String actualResults) {
         this.actualResults = actualResults;
     }
 
