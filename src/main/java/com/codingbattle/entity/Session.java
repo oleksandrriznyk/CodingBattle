@@ -1,17 +1,11 @@
 package com.codingbattle.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
 @Document(collection = "sessions")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Session {
 
     @Id
@@ -20,4 +14,38 @@ public class Session {
     private User playerSecond;
     private Task task;
 
+    public Session() {
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public User getPlayerFirst() {
+        return playerFirst;
+    }
+
+    public void setPlayerFirst(User playerFirst) {
+        this.playerFirst = playerFirst;
+    }
+
+    public User getPlayerSecond() {
+        return playerSecond;
+    }
+
+    public void setPlayerSecond(User playerSecond) {
+        this.playerSecond = playerSecond;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 }
