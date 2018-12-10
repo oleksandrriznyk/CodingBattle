@@ -167,10 +167,13 @@ public class DynamicCompiler {
 
         } else {
             Path classFile = Paths.get(compileSource(javaFile, gameName));
+            long before = System.currentTimeMillis();
             List<TestResult> testResults = runClass(classFile, gameName, task);
+            long after = System.currentTimeMillis();
             File file = new File(classFile.toString());
             dto.setTestResultList(testResults);
             dto.setStatus("OK");
+            dto.setExecutionTime(after-before);
             String fileNameWithoutExtension = file.getName()
                     .substring(0, file.getName().indexOf("."));
             deleteFiles(fileNameWithoutExtension);

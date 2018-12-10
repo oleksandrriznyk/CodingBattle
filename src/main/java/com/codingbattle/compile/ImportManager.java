@@ -31,4 +31,8 @@ public class ImportManager {
                 .append("\n");
         return sb;
     }
+
+    public void addImport(String taskId, StringBuilder imports){
+        this.imports.put(taskId, imports);
+    }
 }

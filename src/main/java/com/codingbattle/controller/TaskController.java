@@ -1,5 +1,7 @@
 package com.codingbattle.controller;
 
+import com.codingbattle.compile.ImportManager;
+import com.codingbattle.dto.ImportsDto;
 import com.codingbattle.entity.Task;
 import com.codingbattle.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private ImportManager importManager;
+
     @GetMapping("/{taskId}")
     public Task find(@PathVariable("taskId") String taskId){
         return taskService.findById(taskId);
@@ -37,5 +42,11 @@ public class TaskController {
     @GetMapping("/delete/{taskId}")
     public void delete(@PathVariable("taskId") String taskId){
         taskService.delete(taskId);
+    }
+
+    @PostMapping("/imports")
+    public ImportsDto addImports(@RequestBody ImportsDto importsDto){
+        importManager.addImport(importsDto.getTaskId(), importsDto.getImports());
+        return importsDto;
     }
 }

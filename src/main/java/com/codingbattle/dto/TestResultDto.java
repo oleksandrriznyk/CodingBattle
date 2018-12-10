@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class TestResultDto {
 
-    List<TestResult> testResultList;
-    String status;
+    private List<TestResult> testResultList;
+    private String status;
+    private double executionTime;
 }

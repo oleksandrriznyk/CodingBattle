@@ -3,9 +3,8 @@ package com.codingbattle.dto;
 import lombok.Data;
 
 @Data
-public class SourceCodeDto {
+public class ImportsDto {
 
-    private String source;
-    private String gameName;
     private String taskId;
+    private StringBuilder imports;
 }
