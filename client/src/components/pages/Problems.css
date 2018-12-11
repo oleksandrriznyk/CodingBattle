@@ -1,0 +1,8 @@
+.problems-list {
+  padding: 0 24px;
+}
+
+.problems-list li {
+  padding: 12px 0;
+  font-size: 18px;
+}
