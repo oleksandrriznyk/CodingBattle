@@ -1,10 +1,5 @@
 package com.codingbattle.entity;
 
-import lombok.NoArgsConstructor;
-
-import java.util.UUID;
-
-@NoArgsConstructor
 public class TestResult extends Test {
 
     private String actualResults;
@@ -18,6 +13,9 @@ public class TestResult extends Test {
         this.setId(test.getId());
         this.setInputParams(test.getInputParams());
         this.setOutputParams(test.getOutputParams());
+    }
+
+    public TestResult() {
     }
 
     public String getActualResults() {
