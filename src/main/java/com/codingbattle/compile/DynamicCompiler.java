@@ -1,6 +1,10 @@
 package com.codingbattle.compile;
 
 import com.codingbattle.compile.parser.service.ParseService;
+import com.codingbattle.dto.TestResultDto;
+import com.codingbattle.entity.Task;
+import com.codingbattle.entity.Test;
+import com.codingbattle.entity.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +27,9 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -43,6 +50,9 @@ public class DynamicCompiler {
     @Autowired
     private ParseService parseService;
 
+    @Autowired
+    private ImportManager importManager;
+
     private String readCode(String sourcePath) throws FileNotFoundException {
         InputStream stream = new FileInputStream(sourcePath);
         String result;
@@ -59,9 +69,13 @@ public class DynamicCompiler {
         return result;
     }
 
-    private Path saveSource(String source, String gameName) throws IOException {
+    private Path saveSource(String source, String gameName, Task task) throws IOException {
         Path sourcePath = Paths.get(TEMP_DIR, gameName + EXTENSION_JAVA);
-        Files.write(sourcePath, source.getBytes(UTF_8));
+        StringBuilder imports = importManager.getImports().get(task.getId());
+        if(imports!=null){
+            Files.write(sourcePath, importManager.getImports().get(task.getId()).toString().getBytes(UTF_8));
+        }
+        Files.write(sourcePath, source.getBytes(UTF_8), StandardOpenOption.APPEND);
         return sourcePath;
     }
 
@@ -88,46 +102,85 @@ public class DynamicCompiler {
         }
     }
 
-    //TODO add parameters for method.invoke()
-    private String runClass(Path javaClass, String gameName)
-            throws ClassNotFoundException, NoSuchMethodException, MalformedURLException,
-            IllegalAccessException, InstantiationException {
+    private List<TestResult> runClass(Path javaClass, String gameName, Task task)
+            throws ClassNotFoundException, NoSuchMethodException, MalformedURLException {
         URL classUrl = javaClass.getParent().toFile().toURI().toURL();
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
         Class<?> clazz = Class.forName(gameName, true, classLoader);
-        Method m = clazz.getDeclaredMethod("print", typeManager.getTypes().get("int"));//TODO input parameter
-        String result;
-        String input = "12";//TODO input parameter
-        try {
-            result = m.invoke(clazz.newInstance(), (Object) parseService.parse(input, int.class/*TODO input parameter*/)).toString();
-        } catch (InvocationTargetException e) {
-            result = e.getMessage();
+        Class inputParameterType = typeManager.getTypes().get(task.getInputType());
+        Method shouldBeRanMethod = clazz.getDeclaredMethod(task.getMethodName(), inputParameterType);
+        List<Test> testList = task.getTest();
+        List<TestResult> testResults = new ArrayList<>();
+        runTests(testList, shouldBeRanMethod, inputParameterType, clazz, testResults);
+
+        checkResults(testList, testResults);
+        return testResults;
+    }
+
+    private void runTests(List<Test> testList,
+                          Method shouldBeRanMethod,
+                          Class inputParameterType,
+                          Class<?> clazz,
+                          List<TestResult> testResults){
+        for (int i = 0; i < testList.size(); i++) {
+            String result;
+            try {
+                result = shouldBeRanMethod.invoke(clazz.newInstance(),
+                        (Object) parseService.parse(testList.get(i).getInputParams(), inputParameterType)).toString();
+
+                TestResult testResult = new TestResult(testList.get(i));
+                testResult.setActualResults(result);
+                testResults.add(testResult);
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                result = e.getMessage();
+                TestResult testResult = new TestResult(testList.get(i));
+                testResult.setActualResults(result);
+                testResults.add(testResult);
+            }
         }
-        return result;
     }
 
-    public String doEvil(String sourcePath, String gameName) throws Exception {
+    private void checkResults(List<Test> tests, List<TestResult> testResults) {
+        for (int i = 0; i < tests.size(); i++) {
+            String expectedResults = tests.get(i).getOutputParams();
+            String actualResults = testResults.get(i).getActualResults();
+            if (expectedResults.equals(actualResults)) {
+                testResults.get(i).setPassed(true);
+            }
+        }
+    }
+
+    public TestResultDto doEvil(String sourcePath, String gameName, Task task) throws Exception {
         String source = readCode(sourcePath);
-        Path javaFile = saveSource(source, gameName);
+        Path javaFile = saveSource(source, gameName, task);
         String str = compileSource(javaFile, gameName);
-        return parseResult(str, gameName, javaFile);
+        return parseResult(str, gameName, javaFile, task);
     }
 
-    private String parseResult(String input, String gameName, Path javaFile) throws Exception {
-        String result;
+    private TestResultDto parseResult(String input, String gameName, Path javaFile, Task task) throws Exception {
+        TestResultDto dto = new TestResultDto();
         if (input.contains(ERROR)) {
+            String result;
             result = input.substring(input.indexOf(ERROR));
             result = result.replaceAll("(location: [^\n]*)", "");
+            dto.setStatus(result);
+
         } else {
             Path classFile = Paths.get(compileSource(javaFile, gameName));
-            result = runClass(classFile, gameName);
+            long before = System.currentTimeMillis();
+            List<TestResult> testResults = runClass(classFile, gameName, task);
+            long after = System.currentTimeMillis();
             File file = new File(classFile.toString());
+            dto.setTestResultList(testResults);
+            dto.setStatus("OK");
+            dto.setExecutionTime(after-before);
             String fileNameWithoutExtension = file.getName()
                     .substring(0, file.getName().indexOf("."));
             deleteFiles(fileNameWithoutExtension);
         }
-        return result;
+        return dto;
     }
+
 
     private void deleteFiles(String fileNameWithoutExtension) throws IOException {
         File javaFile = new File(TEMP_DIR + "/" + fileNameWithoutExtension +

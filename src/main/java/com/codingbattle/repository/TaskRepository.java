@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface TaskRepository extends MongoRepository<Task, UUID> {
+public interface TaskRepository extends MongoRepository<Task, String> {
 }

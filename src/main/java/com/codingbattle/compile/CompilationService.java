@@ -1,9 +1,11 @@
 package com.codingbattle.compile;
 
+import com.codingbattle.dto.TestResultDto;
+import com.codingbattle.entity.Task;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface CompilationService {
 
-    String compile(String code, String gameName) throws Exception;
+    TestResultDto compile(String code, String gameName, Task task) throws Exception;
 }
