@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/codingbattle.iml" filepath="$PROJECT_DIR$/.idea/modules/codingbattle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codingbattle_main.iml" filepath="$PROJECT_DIR$/.idea/modules/codingbattle_main.iml" group="friendsbattle" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codingbattle_test.iml" filepath="$PROJECT_DIR$/.idea/modules/codingbattle_test.iml" group="friendsbattle" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codingbattle_main.iml" filepath="$PROJECT_DIR$/.idea/modules/codingbattle_main.iml" group="codingbattle" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codingbattle_test.iml" filepath="$PROJECT_DIR$/.idea/modules/codingbattle_test.iml" group="codingbattle" />
     </modules>
   </component>
 </project>
