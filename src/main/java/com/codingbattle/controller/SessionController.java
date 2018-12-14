@@ -33,7 +33,8 @@ public class SessionController {
         User playerOne = userService.findOne(playerFirst);
         User playerTwo = userService.findOne(playerSecond);
         Task task = taskService.findRandom();
-        return sessionService.save(new Session(UUID.randomUUID(), playerOne, playerTwo, task));
+        return null;
+//        return sessionService.save(new Session(UUID.randomUUID(), playerOne, playerTwo, task));
     }
 
 }
