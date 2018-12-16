@@ -7,6 +7,15 @@
   border-radius: 5px;
 }
 
+.problem-info h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.problem-info p {
+  
+}
+
 .problem-footer {
   margin-top: 24px;
 }

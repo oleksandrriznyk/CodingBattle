@@ -8,20 +8,52 @@ class Problem extends Component {
     this.match = props.match;
     
     this.state = {
-      flask: {}
+      flask: {},
+      task: {}
     }
   }
 
   componentDidMount() {
-    this.setState({
-      flask: new CodeFlask('#code', { language: 'js', lineNumbers: true })
-    })
+    this.getTaskByID();
     // flask.addLanguage('java', options)
   }
 
-  handleSubmitCode = () => {
+  codeFlaskInit() {
+    this.setState({
+      flask: new CodeFlask('#code', { language: 'js', lineNumbers: true })
+    })
+  }
+
+  getTaskByID = () => {
+    fetch(`/api/v1/tasks/${this.match.params.problemId}`)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({task: data }, this.codeFlaskInit)
+    })
+    .catch(err => console.error(this.props.url, err.toString()));
+  }
+
+  handleSubmitCode = (event) => {
     const code = this.state.flask.getCode();
-    alert(code);
+
+    console.log(code)
+    
+    event.preventDefault();
+    fetch('http://localhost:8080/api/v1/compilation/compile', {
+     method: 'post',
+     headers: {'Content-Type':'application/json'},
+     body: {
+      "source": "public class Temp{ public int arraySum(int[] arr){ int sum=0;for(int i=0;i<arr.length;i++){ sum+=arr[i];}return sum;}}",
+      "gameName": "Temp",
+      "taskId": this.match.params.problemId
+     }
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data) {
+
+      console.log('Test', data);
+      debugger;
+    });
   }
   
   render() {
@@ -29,19 +61,12 @@ class Problem extends Component {
       <section>
         <div className="problem-info">
           <h2>Task #{this.match.params.problemId}</h2>
+          <p>{this.state.task.taskText}</p>
+          <p>{this.state.task.inputType}</p>
         </div>
 
         <div className="code" id="code">
-        {`
-public static void main(String[] args){
-  for(int i = -5; i < 33; i++){
-      System.out.println(i + ": " + toBinary(i));
-      System.out.println(i);
-      //always another way
-      System.out.println(i + ": " + Integer.toBinaryString(i));
-  }
-}
-        `.trim()}       
+          {this.state.task.startCode}       
         </div>
 
         <div className="problem-footer">

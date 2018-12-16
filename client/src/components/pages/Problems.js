@@ -8,6 +8,36 @@ class Problems extends Component {
   constructor(props) {
     super(props);
     this.match = props.match;
+    this.state = {
+      tasks: []
+    }
+  }
+
+  componentDidMount() {
+    this.getAllTasks();
+  }
+
+  getAllTasks = () => {
+    fetch('/api/v1/tasks/all')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({tasks: data })
+    })
+    .catch(err => console.error(this.props.url, err.toString()));
+  }
+
+  renderLinks = () => {
+    let links = [];
+    for(let item of this.state.tasks) {
+      let link = `${this.match.url}/${item.id}`;
+      debugger;
+      links.push(
+        <li className="task">
+          <Link to={link}>{item.taskText}</Link>
+        </li>
+      )
+    }
+    return links;
   }
   
   render() {
@@ -20,15 +50,7 @@ class Problems extends Component {
             render={() => <div>
               <h1>Problems</h1> 
               <ul className="problems-list">
-                <li>
-                  <Link to={`${this.match.url}/1`}>First task</Link>
-                </li>
-                <li>
-                  <Link to={`${this.match.url}/2`}>Second task</Link>
-                </li>
-                <li>
-                  <Link to={`${this.match.url}/3`}>Bubble sort</Link>
-                </li>
+                { this.renderLinks() }
               </ul>
             </div>}
           />

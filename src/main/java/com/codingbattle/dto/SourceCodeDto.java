@@ -38,4 +38,12 @@ public class SourceCodeDto {
         this.taskId = taskId;
     }
 
+    @Override
+    public String toString() {
+        return "SourceCodeDto{" +
+                "source='" + source + '\'' +
+                ", gameName='" + gameName + '\'' +
+                ", taskId='" + taskId + '\'' +
+                '}';
+    }
 }
