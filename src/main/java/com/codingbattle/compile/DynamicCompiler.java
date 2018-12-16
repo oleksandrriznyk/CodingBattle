@@ -74,8 +74,9 @@ public class DynamicCompiler {
         StringBuilder imports = importManager.getImports().get(task.getId());
         if(imports!=null){
             Files.write(sourcePath, importManager.getImports().get(task.getId()).toString().getBytes(UTF_8));
+            Files.write(sourcePath, source.getBytes(UTF_8), StandardOpenOption.APPEND);
         }
-        Files.write(sourcePath, source.getBytes(UTF_8), StandardOpenOption.APPEND);
+        Files.write(sourcePath, source.getBytes(UTF_8));
         return sourcePath;
     }
 

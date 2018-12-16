@@ -37,16 +37,15 @@ class Problem extends Component {
     const code = this.state.flask.getCode();
 
     console.log(code)
-    
     event.preventDefault();
     fetch('http://localhost:8080/api/v1/compilation/compile', {
      method: 'post',
      headers: {'Content-Type':'application/json'},
-     body: {
-      "source": "public class Temp{ public int arraySum(int[] arr){ int sum=0;for(int i=0;i<arr.length;i++){ sum+=arr[i];}return sum;}}",
-      "gameName": "Temp",
-      "taskId": this.match.params.problemId
-     }
+     body: JSON.stringify({
+      source: "public class Temp{ public int arraySum(int[] arr){ int sum=0;for(int i=0;i<arr.length;i++){ sum+=arr[i];}return sum;}}",
+      gameName: "Temp",
+      taskId: this.match.params.problemId.toString()
+     })
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
