@@ -43,6 +43,7 @@ public class DynamicCompiler {
     private static final String EXTENSION_TXT = ".txt";
     private static final String EXTENSION_CLASS = ".class";
     private static final String ERROR = "error";
+    private static StringBuilder CODE_TEMPLATE = new StringBuilder("public class ");
 
     @Autowired
     private TypeManager typeManager;
@@ -69,15 +70,25 @@ public class DynamicCompiler {
         return result;
     }
 
+    //TODO replace hardcode with current userId
     private Path saveSource(String source, String gameName, Task task) throws IOException {
-        Path sourcePath = Paths.get(TEMP_DIR, gameName + EXTENSION_JAVA);
+        Path sourcePath = Paths.get(TEMP_DIR, gameName+"1" + EXTENSION_JAVA);
         StringBuilder imports = importManager.getImports().get(task.getId());
-        if(imports!=null){
-            Files.write(sourcePath, importManager.getImports().get(task.getId()).toString().getBytes(UTF_8));
-            Files.write(sourcePath, source.getBytes(UTF_8), StandardOpenOption.APPEND);
-        }
-        Files.write(sourcePath, source.getBytes(UTF_8));
+        generateSource(sourcePath, gameName, source, imports);
         return sourcePath;
+    }
+
+    //TODO replace hardcode with current userId
+    private void generateSource(Path sourcePath, String gameName, String source, StringBuilder imports) throws IOException {
+        StringBuilder sourceCode = new StringBuilder(CODE_TEMPLATE);
+        sourceCode.append(gameName).append("1")
+                .append("{")
+                .append(source)
+                .append("}");
+        if(imports!=null){
+            sourceCode.insert(0, imports);
+        }
+        Files.write(sourcePath, sourceCode.toString().getBytes(UTF_8), StandardOpenOption.APPEND);
     }
 
     private String compileSource(Path javaFile, String gameName) throws IOException {
@@ -151,11 +162,11 @@ public class DynamicCompiler {
         }
     }
 
-    public TestResultDto doEvil(String sourcePath, String gameName, Task task) throws Exception {
-        String source = readCode(sourcePath);
+    //TODO replace hardCode with userId
+    public TestResultDto doEvil(String source, String sourcePath, String gameName, Task task) throws Exception {
         Path javaFile = saveSource(source, gameName, task);
-        String str = compileSource(javaFile, gameName);
-        return parseResult(str, gameName, javaFile, task);
+        String str = compileSource(javaFile, gameName+"1");
+        return parseResult(str, gameName+"1", javaFile, task);
     }
 
     private TestResultDto parseResult(String input, String gameName, Path javaFile, Task task) throws Exception {

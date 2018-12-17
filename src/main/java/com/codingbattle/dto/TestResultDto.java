@@ -1,7 +1,6 @@
 package com.codingbattle.dto;
 
 import com.codingbattle.entity.TestResult;
-import lombok.Data;
 
 import java.util.List;
 

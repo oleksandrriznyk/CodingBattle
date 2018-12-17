@@ -35,6 +35,7 @@ class Problem extends Component {
 
   handleSubmitCode = (event) => {
     const code = this.state.flask.getCode();
+    const methodName = this.state.task.methodName;
 
     console.log(code)
     event.preventDefault();
@@ -42,8 +43,8 @@ class Problem extends Component {
      method: 'post',
      headers: {'Content-Type':'application/json'},
      body: JSON.stringify({
-      source: "public class Temp{ public int arraySum(int[] arr){ int sum=0;for(int i=0;i<arr.length;i++){ sum+=arr[i];}return sum;}}",
-      gameName: "Temp",
+      source: code,
+      gameName: methodName,
       taskId: this.match.params.problemId.toString()
      })
     }).then(function(response) {
