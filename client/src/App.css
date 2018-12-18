@@ -27,6 +27,12 @@ header {
 
 .profile {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.profile > *:not(:last-child) {
+  margin-right: 16px;
 }
 
 .logo {

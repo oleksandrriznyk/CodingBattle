@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import CodeFlask from 'codeflask';
 import './Problem.css';
 
+import Modal from 'react-modal';
+
 class Problem extends Component {
   constructor(props) {
     super(props);
@@ -9,8 +11,28 @@ class Problem extends Component {
     
     this.state = {
       flask: {},
-      task: {}
+      task: {},
+      tests: [],
+      showModalWait: true,
+      showModalResult: true,
+      result: 'Ты победил'
     }
+  }
+
+  handleOpenModalWait = () => {
+    this.setState({ showModalWait: true });
+  }
+
+  handleCloseModalWait = () => {
+    this.setState({ showModalWait: false });
+  }
+
+  handleOpenModalResult = () => {
+    this.setState({ showModalResult: true });
+  }
+
+  handleCloseModalResult = () => {
+    this.setState({ showModalResult: false });
   }
 
   componentDidMount() {
@@ -49,16 +71,56 @@ class Problem extends Component {
      })
     }).then(function(response) {
       return response.json();
-    }).then(function(data) {
-
-      console.log('Test', data);
-      debugger;
+    }).then( (data) => {
+      this.setState({
+        tests: data.testResultList
+      })
     });
+  }
+
+  testsRender() {
+    let results = [];
+
+    if(this.state.tests) {
+      for(let item of this.state.tests) {
+        results.push(
+          <div className="test-result">
+            { item.passed ? 'OK' : 'Wrong'}
+          </div>
+        );
+      }
+    } else {
+      results.push(
+        <div className="test-result">
+          WRONG
+        </div>
+      );
+    }
+
+    return results;
   }
   
   render() {
+    var modalStyles = {overlay: {zIndex: 10}};
+
     return (
       <section>
+        <Modal isOpen={this.state.showModalWait} style={modalStyles} className="modal modal--wait">
+            <button className="modal__close" onClick={this.handleCloseModalWait}>X потом скрыть эту кнопку</button>
+            <div className="modal__content">
+              <p>Ожидание соперника</p>
+              <img src="https://loading.io/spinners/balls/lg.circle-slack-loading-icon.gif"/>
+            </div>
+        </Modal>
+
+        <Modal isOpen={this.state.showModalResult} style={modalStyles} className="modal modal--result">
+            <button className="modal__close" onClick={this.handleCloseModalResult}>Close</button>
+            <div className="modal__content">
+              <p>Результат</p>
+              <div className="modal__result">{this.state.result}</div>
+            </div>
+        </Modal>
+        
         <div className="problem-info">
           <h2>Task #{this.match.params.problemId}</h2>
           <p>{this.state.task.taskText}</p>
@@ -71,6 +133,10 @@ class Problem extends Component {
 
         <div className="problem-footer">
           <input className="problem-footer__submit" onClick={this.handleSubmitCode} type="button" value="Submit"/>
+        </div>
+
+        <div className="problem-tests">
+          { this.testsRender() }
         </div>
       </section>
     );

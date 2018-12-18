@@ -7,6 +7,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from "./components/pages/Home";
 import Problems from "./components/pages/Problems";
 import Profile from "./components/pages/Profile";
+import Signin from "./components/pages/Signin";
+import Signup from "./components/pages/Signup";
 
 class App extends Component {
   render() {
@@ -24,6 +26,8 @@ class App extends Component {
 
           <div className="profile">
             <Link to="/profile">Profile</Link>
+            <Link to="/signin">Sign in</Link>
+            <Link to="/signup">Sign up</Link>
           </div>
         </header>
 
@@ -31,6 +35,8 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route path="/problems" component={Problems} />
           <Route path="/profile" component={Profile} />
+          <Route path="/signin" component={Signin} />
+          <Route path="/signup" component={Signup} />
         </main>
       </div>
     </Router>

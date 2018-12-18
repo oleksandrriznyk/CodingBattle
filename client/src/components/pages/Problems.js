@@ -30,7 +30,6 @@ class Problems extends Component {
     let links = [];
     for(let item of this.state.tasks) {
       let link = `${this.match.url}/${item.id}`;
-      debugger;
       links.push(
         <li className="task">
           <Link to={link}>{item.taskText}</Link>

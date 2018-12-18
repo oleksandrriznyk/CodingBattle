@@ -42,3 +42,49 @@
 .codeflask {
   border-radius: 6px;
 }
+
+
+
+.problem-tests {
+  margin-top: 24px;
+}
+
+.test-result {
+  margin-bottom: 8px;
+}
+
+/* */
+.modal {
+  font-family: Arial, Tahoma, Verdana, sans-serif;
+  
+  position: fixed;
+  z-index: 10; 
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__content {
+  background: #fff;
+  text-align: center;
+}
+
+.modal__close {
+  position: absolute;
+  right: 10%;
+  top: 10%;
+  color: #000;
+  font-size: 24px;
+  background: transparent;
+  border: 0;
+}
+
+.modal__result {
+  font-size: 40px;
+  margin-top: 20px;
+}
