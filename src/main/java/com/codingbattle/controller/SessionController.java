@@ -7,15 +7,18 @@ import com.codingbattle.service.SessionService;
 import com.codingbattle.service.TaskService;
 import com.codingbattle.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/sessions")
 public class SessionController {
 
     @Autowired
@@ -27,14 +30,33 @@ public class SessionController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/session")
-    public Session save(@RequestParam("playerFirst") String playerFirst,
-                        @RequestParam(name = "playerSecond", required = false) String playerSecond) {
-        User playerOne = userService.findOne(playerFirst);
-        User playerTwo = userService.findOne(playerSecond);
-        Task task = taskService.findRandom();
-        return null;
-//        return sessionService.save(new Session(UUID.randomUUID(), playerOne, playerTwo, task));
+    CountDownLatch countDownLatch = new CountDownLatch(2);
+    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
+    @PostMapping("/prepareSession")
+    public UUID prepareSession(@RequestParam("taskName") String taskName) throws InterruptedException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User playerOne = userService.findOne(currentPrincipalName);
+        Task task = taskService.findOne(taskName);
+        UUID sessionId = UUID.randomUUID();
+        sessionService.save(new Session(sessionId, playerOne, null, task));
+        
+
+        return sessionId;
+    }
+
+    @GetMapping("/connect")
+    public Task connect(@RequestParam("sessionId") String sessionId) throws InterruptedException {
+
+        Session session = sessionService.findOne(sessionId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User playerSecond = userService.findOne(currentPrincipalName);
+        session.setPlayerSecond(playerSecond);
+        sessionService.save(session);
+        return session.getTask();
     }
 
 }

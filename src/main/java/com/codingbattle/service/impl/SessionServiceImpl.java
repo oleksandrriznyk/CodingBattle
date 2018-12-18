@@ -6,6 +6,8 @@ import com.codingbattle.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class SessionServiceImpl implements SessionService {
 
@@ -19,5 +21,10 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Session save(Session session) {
         return sessionRepository.save(session);
+    }
+
+    @Override
+    public Session findOne(String sessionId) {
+        return sessionRepository.findOne(UUID.fromString(sessionId));
     }
 }

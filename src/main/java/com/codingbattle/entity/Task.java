@@ -4,31 +4,30 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-import java.util.UUID;
 
 @Document(collection = "tasks")
 public class Task {
 
     @Id
-    private UUID id;
+    private String taskName;
     private String taskText;
     private List<Test> test;
 
     public Task() {
     }
 
-    public Task(UUID id, String taskText, List<Test> test) {
-        this.id = id;
+    public Task(String taskName, String taskText, List<Test> test) {
+        this.taskName = taskName;
         this.taskText = taskText;
         this.test = test;
     }
 
-    public UUID getId() {
-        return id;
+    public String getId() {
+        return taskName;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId(String taskName) {
+        this.taskName = taskName;
     }
 
     public String getTaskText() {

@@ -23,4 +23,9 @@ public class TaskServiceImpl implements TaskService {
         List<Task> allTasks = taskRepository.findAll();
         return allTasks.get((int)(Math.random()*allTasks.size()));
     }
+
+    @Override
+    public Task findOne(String taskName) {
+        return taskRepository.findOne(taskName);
+    }
 }
