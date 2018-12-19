@@ -1,0 +1,44 @@
+.problem-info {
+  background: #eee;
+  padding: 24px;
+  margin-bottom: 16px;
+  font-size: 14px;
+
+  border-radius: 5px;
+}
+
+.problem-info h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.problem-info p {
+  
+}
+
+.problem-footer {
+  margin-top: 24px;
+}
+
+.problem-footer__submit {
+  border: 0px;
+  background: rgb(255, 228, 140);
+  padding: 8px 40px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: 0;
+}
+
+.code {
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 6px;
+  position: relative;
+  height: 100%;
+  min-height: 600px;
+}
+
+
+.codeflask {
+  border-radius: 6px;
+}

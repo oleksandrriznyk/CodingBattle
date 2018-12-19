@@ -4,6 +4,7 @@ public class SourceCodeDto {
 
     private String source;
     private String gameName;
+    private String taskId;
 
     public SourceCodeDto(String source, String gameName) {
         this.source = source;
@@ -27,5 +28,22 @@ public class SourceCodeDto {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
+    }
+
+    public String getTaskId(){
+        return taskId;
+    }
+
+    public void setTaskId(String taskId){
+        this.taskId = taskId;
+    }
+
+    @Override
+    public String toString() {
+        return "SourceCodeDto{" +
+                "source='" + source + '\'' +
+                ", gameName='" + gameName + '\'' +
+                ", taskId='" + taskId + '\'' +
+                '}';
     }
 }

@@ -15,7 +15,14 @@ public class Session {
     private Task task;
     private SessionResult sessionResult;
 
-    public Session() {
+    public   Session() {
+    }
+
+    public Session(UUID id, User playerFirst, User playerSecond, Task task) {
+        this.id = id;
+        this.playerFirst = playerFirst;
+        this.playerSecond = playerSecond;
+        this.task = task;
     }
 
     public Session(UUID id, User playerFirst, User playerSecond, Task task) {

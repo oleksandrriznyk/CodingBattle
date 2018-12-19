@@ -46,6 +46,7 @@ dependencies {
     compile group: 'com.github.jsqlparser', name: 'jsqlparser', version: '1.2'
     compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.7.1'
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.7'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     compile("org.springframework.boot:spring-boot-starter-security")
     compile('javax.xml.bind:jaxb-api:2.3.0')

@@ -3,47 +3,44 @@ package com.codingbattle.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-import java.util.UUID;
-
 @Document(collection = "tests")
 public class Test {
 
     @Id
-    private UUID id;
-    private List<String> inputParams;
-    private List<String> outputParams;
+    private String id;
+    private String inputParams;
+    private String outputParams;
 
     public Test() {
     }
 
-    public Test(UUID id, List<String> inputParams, List<String> outputParams) {
+    public Test(String id, String inputParams, String outputParams) {
         this.id = id;
         this.inputParams = inputParams;
         this.outputParams = outputParams;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public List<String> getInputParams() {
+    public String getInputParams() {
         return inputParams;
     }
 
-    public void setInputParams(List<String> inputParams) {
+    public void setInputParams(String inputParams) {
         this.inputParams = inputParams;
     }
 
-    public List<String> getOutputParams() {
+    public String getOutputParams() {
         return outputParams;
     }
 
-    public void setOutputParams(List<String> outputParams) {
+    public void setOutputParams(String outputParams) {
         this.outputParams = outputParams;
     }
 }
