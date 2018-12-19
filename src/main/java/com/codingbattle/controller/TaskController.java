@@ -27,14 +27,11 @@ public class TaskController {
 
     @Autowired
     private ImportManager importManager;
-    private TaskService taskService;
 
     @GetMapping("/taskName")
     public Task getTask(@PathVariable("taskName") String taskName, @PathVariable("sessionId") String sessionId) {
         return taskService.findOne(taskName);
     }
-
-
 
     @GetMapping("/{taskId}")
     public Task find(@PathVariable("taskId") String taskId){

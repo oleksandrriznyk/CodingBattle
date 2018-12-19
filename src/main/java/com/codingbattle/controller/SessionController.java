@@ -26,6 +26,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @RequestMapping("/api/v1/sessions")
 public class SessionController {
 
+    private static final String SESSION_RESULT_DRAW = "DRAW";
+
     @Autowired
     private SessionService sessionService;
 
@@ -48,7 +50,7 @@ public class SessionController {
         Task task = taskService.findOne(taskName);
         UUID sessionId = UUID.randomUUID();
         sessionService.save(new Session(sessionId, playerOne, null, task));
-        
+
 
         return sessionId.toString();
     }
@@ -66,7 +68,7 @@ public class SessionController {
     }
 
     @SendTo("/session/{sessionId}")
-    public TaskDto sessionStart(@DestinationVariable String sessionId){
+    public TaskDto sessionStart(@DestinationVariable String sessionId) {
         Session session = sessionService.findOne(sessionId);
         Task task = session.getTask();
         return new TaskDto(task, sessionId);
@@ -74,8 +76,18 @@ public class SessionController {
     }
 
     @GetMapping("/session/{sessionId}/end")
-    public SessionResult sessionEnd(@RequestParam String sessionId){
-        return sessionService.findOne(sessionId).getSessionResult();
+    public SessionResult sessionEnd(@RequestParam String sessionId) {
+        Session session = sessionService.findOne(sessionId);
+        if (session.getSessionResult().getFirstPlayerExecutionTime()
+                < session.getSessionResult().getSecondPlayerExecutionTime()) {
+            session.getSessionResult().setWinnerLogin(session.getSessionResult().getFirstPlayerLogin());
+        } else if(session.getSessionResult().getFirstPlayerExecutionTime()
+                > session.getSessionResult().getSecondPlayerExecutionTime()){
+            session.getSessionResult().setWinnerLogin(session.getSessionResult().getSecondPlayerLogin());
+        } else {
+            session.getSessionResult().setWinnerLogin(SESSION_RESULT_DRAW);
+        }
+        return session.getSessionResult();
     }
 
 }
