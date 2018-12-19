@@ -2,12 +2,17 @@ package com.codingbattle.controller;
 
 import com.codingbattle.entity.User;
 import com.codingbattle.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
+
+    private static final String ALREADY_EXISTS = "User with this login already exists";
+    private static final String SUCCESSFUL_REGISTRATION = "User has been registered successful";
 
     private UserService userService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -30,9 +35,14 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody User user) {
+    public ResponseEntity signUp(@RequestBody User user) {
+        User existedUser = userService.findOne(user.getLogin());
+        if(existedUser!=null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ALREADY_EXISTS);
+        }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body(SUCCESSFUL_REGISTRATION);
     }
 
 }
