@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +61,7 @@ public class SessionController {
     }
 
     @GetMapping("/connect")
-    public TaskDto connect(@RequestParam("sessionId") String sessionId) throws InterruptedException {
+    public String connect(@RequestParam("sessionId") String sessionId) throws InterruptedException {
 
 
         Session session = sessionService.findOne(sessionId);
@@ -68,15 +69,22 @@ public class SessionController {
         User playerSecond = securityService.getCurrentUser();
         session.setPlayerSecond(playerSecond);
         sessionService.save(session);
-        return sessionStart(sessionId);
+        return ("redirect:/api/v1/sessions/gs-codingbattle/"+sessionId);
     }
 
-    @MessageMapping("/gs-codingbattle")
-    @SendTo("/session/{sessionId}")
-    public TaskDto sessionStart(@DestinationVariable String sessionId) {
-        Session session = sessionService.findOne(sessionId);
-        Task task = session.getTask();
-        return new TaskDto(task, sessionId);
+    @MessageMapping("/gs-codingbattle/{topic}")
+    @SendTo("/topic/messages")
+    public TaskDto sessionStart(@DestinationVariable String topic) {
+        Session session = sessionService.findOne(topic);
+        User playerOne = securityService.getCurrentUser();
+        if(session==null){
+            Task task = taskService.findRandom();
+            sessionService.save(new Session(UUID.fromString(topic), playerOne, null, task));
+        } else {
+            session.setPlayerSecond(playerOne);
+            sessionService.save(session);
+        }
+        return new TaskDto(session.getTask(), session.getId().toString());
 
     }
 

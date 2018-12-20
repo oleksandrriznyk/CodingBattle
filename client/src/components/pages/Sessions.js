@@ -25,7 +25,7 @@ class Sessions extends Component {
     getAllSessions = () => {
         fetch('/api/v1/sessions/all', {
             method: 'GET',
-            headers: {'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6eW1hcmV2MiIsImV4cCI6MTU0NTMyNjA4OX0.09VJeWQyk8LA2i2oR-y7npa1_BW6A3k2Y2KPCDh_II9tUOIB3pYA7DB3w2URbnENnjKshFPQzr7FF-zp6bwC0A'}
+            headers: {'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6eW1hcmV2MyIsImV4cCI6MTU0NTMzODMxM30.5-h_UQE-ZfMMU6xCr3Tvq_dCgYTbHBb3t8GaWQhH_00wFVAngIWF3BqrXAPanzrkZUMJv4AGOOZ9-uqWxymHKw'}
             })
             .then(response => response.json())
             .then(data => {
@@ -49,12 +49,11 @@ class Sessions extends Component {
         return links;
     }
 
-
-
     createSession = () => {
+
         fetch('api/v1/sessions/prepareSession', {
             method: 'POST',
-            headers: {'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6eW1hcmV2MiIsImV4cCI6MTU0NTMyNjA4OX0.09VJeWQyk8LA2i2oR-y7npa1_BW6A3k2Y2KPCDh_II9tUOIB3pYA7DB3w2URbnENnjKshFPQzr7FF-zp6bwC0A'}
+            headers: {'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6eW1hcmV2MyIsImV4cCI6MTU0NTMzODMxM30.5-h_UQE-ZfMMU6xCr3Tvq_dCgYTbHBb3t8GaWQhH_00wFVAngIWF3BqrXAPanzrkZUMJv4AGOOZ9-uqWxymHKw'}
             })
             .then(response=>response.json())
             .then(data=> {
@@ -66,12 +65,11 @@ class Sessions extends Component {
     }
 
     connect = () => {
-        var socket = new SockJS('http://localhost:8080/api/v1/sessions/gs-codingbattle');
-        console.log("socket=>" + socket);
+        var socket = new SockJS('/api/v1/sessions/gs-codingbattle');
         var stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe(`/session/${this.state.acceptedSessionId}`, function(message) {
+            stompClient.subscribe('/topic/messages', function(message) {
                 console.log(JSON.parse(message.body));
             });
         });

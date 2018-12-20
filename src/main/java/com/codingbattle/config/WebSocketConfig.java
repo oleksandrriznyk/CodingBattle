@@ -12,12 +12,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
-        config.enableSimpleBroker("/session/");
+        config.enableSimpleBroker("/topic/");
         config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry){
-        registry.addEndpoint("/gs-codingbattle").withSockJS();
+        registry.addEndpoint("/api/v1/sessions/gs-codingbattle").setAllowedOrigins("*").withSockJS();
     }
 }
