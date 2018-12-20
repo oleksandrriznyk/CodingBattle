@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from "./components/pages/Home";
 import Problems from "./components/pages/Problems";
 import Profile from "./components/pages/Profile";
+import Sessions from "./components/pages/Sessions";
 
 class App extends Component {
   render() {
@@ -19,7 +20,15 @@ class App extends Component {
           </div>
 
           <nav>
-            <Link to="/problems">Problems</Link>
+            <ul>
+                <li>
+                    <Link to="/problems">Problems</Link>
+                </li>
+                <li>
+                    <Link to="/sessions">Sessions</Link>
+                </li>
+            </ul>
+
           </nav>
 
           <div className="profile">
@@ -31,6 +40,7 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route path="/problems" component={Problems} />
           <Route path="/profile" component={Profile} />
+          <Route path="/sessions" component={Sessions} />
         </main>
       </div>
     </Router>

@@ -38,4 +38,14 @@ public class SessionServiceImpl implements SessionService {
     public void delete(Session session) {
         sessionRepository.delete(session);
     }
+
+    @Override
+    public List<Session> findAll() {
+        return sessionRepository.findAll();
+    }
+
+    @Override
+    public void deleteAll() {
+        sessionRepository.deleteAll();
+    }
 }

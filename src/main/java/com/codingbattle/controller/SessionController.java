@@ -46,15 +46,17 @@ public class SessionController {
     ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     @PostMapping("/prepareSession")
-    public String prepareSession(@RequestParam(name = "taskName") String taskName) throws InterruptedException {
+    public Session prepareSession() throws InterruptedException {
 
         User playerOne = securityService.getCurrentUser();
-        Task task = taskService.findOne(taskName);
+        Task task = taskService.findRandom();
         UUID sessionId = UUID.randomUUID();
-        sessionService.save(new Session(sessionId, playerOne, null, task));
+        return sessionService.save(new Session(sessionId, playerOne, null, task));
+    }
 
-
-        return sessionId.toString();
+    @GetMapping("/{sessionId}")
+    public Session getById(@PathVariable String sessionId){
+        return sessionService.findOne(sessionId);
     }
 
     @GetMapping("/connect")
@@ -98,7 +100,7 @@ public class SessionController {
         return sessionService.findAllWithOnePlayer();
     }
 
-    @GetMapping("/delete/{sesionId}")
+    @GetMapping("/delete/{sessionId}")
     public ResponseEntity deleteSession(@PathVariable String sessionId) {
         User currentUser = securityService.getCurrentUser();
         Session session = sessionService.findOne(sessionId);
@@ -108,6 +110,12 @@ public class SessionController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("This session was created by another user");
         }
+    }
+
+    @GetMapping("/delete/all")
+    public void deleteAllSessions(){
+        List<Session> sessions = sessionService.findAll();
+        sessionService.deleteAll();
     }
 
 }

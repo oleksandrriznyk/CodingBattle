@@ -12,4 +12,8 @@ public interface SessionService {
     List<Session> findAllWithOnePlayer();
 
     void delete(Session session);
+
+    List<Session> findAll();
+
+    void deleteAll();
 }
