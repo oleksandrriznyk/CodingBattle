@@ -8,6 +8,8 @@ import Home from "./components/pages/Home";
 import Problems from "./components/pages/Problems";
 import Profile from "./components/pages/Profile";
 import Sessions from "./components/pages/Sessions";
+import Signin from "./components/pages/Signin";
+import Signup from "./components/pages/Signup";
 
 class App extends Component {
   render() {
@@ -20,19 +22,14 @@ class App extends Component {
           </div>
 
           <nav>
-            <ul>
-                <li>
-                    <Link to="/problems">Problems</Link>
-                </li>
-                <li>
-                    <Link to="/sessions">Sessions</Link>
-                </li>
-            </ul>
-
+            <Link to="/problems">Problems</Link>
+            <Link to="/sessions">Sessions</Link>
           </nav>
 
           <div className="profile">
             <Link to="/profile">Profile</Link>
+            <Link to="/signin">Sign in</Link>
+            <Link to="/signup">Sign up</Link>
           </div>
         </header>
 
@@ -41,6 +38,8 @@ class App extends Component {
           <Route path="/problems" component={Problems} />
           <Route path="/profile" component={Profile} />
           <Route path="/sessions" component={Sessions} />
+          <Route path="/signin" component={Signin} />
+          <Route path="/signup" component={Signup} />
         </main>
       </div>
     </Router>

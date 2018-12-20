@@ -1,0 +1,30 @@
+.form {
+  
+  }
+  
+  .form label {
+    display: block;
+    margin-bottom: 16px;
+  }
+  
+  .form [type='text'],
+  .form [type='password'] {
+    padding: 8px;
+    min-width: 200px;
+  }
+  
+  .form label span {
+    display: block;
+    margin-bottom: 3px;
+  }
+  
+  .form [type='button'],
+  .form [type='submit'] {
+    border: 0px;
+    background: rgb(255, 228, 140);
+    padding: 8px 40px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: 0;
+  }

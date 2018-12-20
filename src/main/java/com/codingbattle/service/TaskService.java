@@ -3,7 +3,6 @@ package com.codingbattle.service;
 import com.codingbattle.entity.Task;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface TaskService {
 

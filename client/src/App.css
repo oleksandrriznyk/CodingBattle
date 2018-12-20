@@ -28,6 +28,9 @@ header {
 .profile {
   margin-left: auto;
 }
+.profile > *:not(:last-child) {
+  margin-right: 16px;
+}
 
 .logo {
   font-family: monospace;
@@ -44,4 +47,12 @@ header {
 
 main {
   padding: 40px 0;
+}
+
+
+nav {
+  display: flex;
+}
+nav > *:not(:last-child) {
+  margin-right: 16px;
 }
