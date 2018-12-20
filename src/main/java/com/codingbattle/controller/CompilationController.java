@@ -24,6 +24,6 @@ public class CompilationController {
     @PostMapping("/compile")
     public TestResultDto compile(@RequestBody SourceCodeDto dto) throws Exception {
         Task task = taskService.findById(dto.getTaskId());
-        return compilationService.compile(dto.getSource(), dto.getGameName(), task);
+        return compilationService.compile(dto.getSource(), dto.getGameName(), task, dto.getSessionId());
     }
 }

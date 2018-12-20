@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TaskService {
+
     Task findRandom();
+    Task findOne(String taskName);
+
 
     Task findById(String taskId);
 

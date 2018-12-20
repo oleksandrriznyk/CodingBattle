@@ -1,5 +1,9 @@
 package com.codingbattle.controller;
 
+import com.codingbattle.entity.Task;
+import com.codingbattle.service.TaskService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import com.codingbattle.compile.ImportManager;
 import com.codingbattle.dto.ImportsDto;
 import com.codingbattle.entity.Task;
@@ -23,6 +27,11 @@ public class TaskController {
 
     @Autowired
     private ImportManager importManager;
+
+    @GetMapping("/taskName")
+    public Task getTask(@PathVariable("taskName") String taskName, @PathVariable("sessionId") String sessionId) {
+        return taskService.findOne(taskName);
+    }
 
     @GetMapping("/{taskId}")
     public Task find(@PathVariable("taskId") String taskId){

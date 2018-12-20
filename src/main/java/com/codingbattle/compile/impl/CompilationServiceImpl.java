@@ -4,6 +4,7 @@ import com.codingbattle.compile.CompilationService;
 import com.codingbattle.compile.DynamicCompiler;
 import com.codingbattle.dto.TestResultDto;
 import com.codingbattle.entity.Task;
+import com.codingbattle.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +22,22 @@ public class CompilationServiceImpl implements CompilationService {
     @Autowired
     private DynamicCompiler dynamicCompiler;
 
+    @Autowired
+    private SecurityService securityService;
+
     @Override
-    public TestResultDto compile(String sourceCode, String gameName, Task task) throws Exception {
-        String sourcePath = createFileFromSourceCode(gameName);
-        return dynamicCompiler.doEvil(sourceCode, sourcePath, gameName, task);
+    public TestResultDto compile(String sourceCode, String gameName, Task task, String sessionId) throws Exception {
+        createFileFromSourceCode(gameName);
+        return dynamicCompiler.doEvil(sourceCode, gameName, task, sessionId);
 
     }
 
-    //TODO replace hardCode with current userID
-    private String createFileFromSourceCode(String gameName) throws IOException {
-        String sourcePath = TEMP_DIR + gameName+"1" + EXTENSION_JAVA;
+    private void createFileFromSourceCode(String gameName) throws IOException {
+        String currentUserLogin = securityService.getCurrentUser().getLogin();
+        String sourcePath = TEMP_DIR + gameName+currentUserLogin + EXTENSION_JAVA;
         File file = new File(sourcePath);
         OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
         writer.flush();
         writer.close();
-        return sourcePath;
     }
 }

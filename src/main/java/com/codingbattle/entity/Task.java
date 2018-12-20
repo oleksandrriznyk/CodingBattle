@@ -10,6 +10,7 @@ public class Task {
 
     @Id
     private String id;
+    private String taskName;
     private String taskText;
     private List<Test> test;
     private String inputType;
@@ -28,7 +29,6 @@ public class Task {
         this.startCode = startCode;
     }
 
-
     public String getId() {
         return id;
     }
@@ -36,7 +36,6 @@ public class Task {
     public void setId(String id) {
         this.id = id;
     }
-
     public String getTaskText() {
         return taskText;
     }

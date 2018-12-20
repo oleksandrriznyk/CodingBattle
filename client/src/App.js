@@ -9,6 +9,7 @@ import Problems from "./components/pages/Problems";
 import Profile from "./components/pages/Profile";
 import Signin from "./components/pages/Signin";
 import Signup from "./components/pages/Signup";
+import Sessions from "./components/pages/Sessions";
 
 class App extends Component {
   render() {
@@ -21,7 +22,15 @@ class App extends Component {
           </div>
 
           <nav>
-            <Link to="/problems">Problems</Link>
+            <ul>
+                <li>
+                    <Link to="/problems">Problems</Link>
+                </li>
+                <li>
+                    <Link to="/sessions">Sessions</Link>
+                </li>
+            </ul>
+
           </nav>
 
           <div className="profile">
@@ -37,6 +46,7 @@ class App extends Component {
           <Route path="/profile" component={Profile} />
           <Route path="/signin" component={Signin} />
           <Route path="/signup" component={Signup} />
+          <Route path="/sessions" component={Sessions} />
         </main>
       </div>
     </Router>

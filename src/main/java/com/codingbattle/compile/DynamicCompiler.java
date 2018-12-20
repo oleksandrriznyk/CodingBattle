@@ -2,9 +2,13 @@ package com.codingbattle.compile;
 
 import com.codingbattle.compile.parser.service.ParseService;
 import com.codingbattle.dto.TestResultDto;
+import com.codingbattle.entity.Session;
 import com.codingbattle.entity.Task;
 import com.codingbattle.entity.Test;
 import com.codingbattle.entity.TestResult;
+import com.codingbattle.entity.User;
+import com.codingbattle.security.service.SecurityService;
+import com.codingbattle.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,6 +58,12 @@ public class DynamicCompiler {
     @Autowired
     private ImportManager importManager;
 
+    @Autowired
+    private SecurityService securityService;
+
+    @Autowired
+    private SessionService sessionService;
+
     private String readCode(String sourcePath) throws FileNotFoundException {
         InputStream stream = new FileInputStream(sourcePath);
         String result;
@@ -70,25 +80,28 @@ public class DynamicCompiler {
         return result;
     }
 
-    //TODO replace hardcode with current userId
-    private Path saveSource(String source, String gameName, Task task) throws IOException {
-        Path sourcePath = Paths.get(TEMP_DIR, gameName+"1" + EXTENSION_JAVA);
+    private Path saveSource(String source, String gameName, Task task, String currentUserLogin) throws IOException {
+        Path sourcePath = Paths.get(TEMP_DIR, gameName+currentUserLogin + EXTENSION_JAVA);
         StringBuilder imports = importManager.getImports().get(task.getId());
-        generateSource(sourcePath, gameName, source, imports);
+        generateSource(sourcePath, gameName, source, imports, currentUserLogin);
         return sourcePath;
     }
 
-    //TODO replace hardcode with current userId
-    private void generateSource(Path sourcePath, String gameName, String source, StringBuilder imports) throws IOException {
+    private void generateSource(Path sourcePath,
+                                String gameName,
+                                String source,
+                                StringBuilder imports,
+                                String currentUserLogin) throws IOException {
         StringBuilder sourceCode = new StringBuilder(CODE_TEMPLATE);
-        sourceCode.append(gameName).append("1")
+        sourceCode.append(gameName).append(currentUserLogin)
                 .append("{")
                 .append(source)
                 .append("}");
         if(imports!=null){
             sourceCode.insert(0, imports);
         }
-        Files.write(sourcePath, sourceCode.toString().getBytes(UTF_8), StandardOpenOption.APPEND);
+        Files.write(sourcePath, sourceCode.toString().getBytes(UTF_8),
+                StandardOpenOption.APPEND);
     }
 
     private String compileSource(Path javaFile, String gameName) throws IOException {
@@ -110,7 +123,8 @@ public class DynamicCompiler {
             return programResult;
         } else {
             return new String(Files.readAllBytes(
-                    Paths.get(fileName.substring(0, fileName.indexOf(".")) + EXTENSION_TXT)));
+                    Paths.get(fileName.substring(0, fileName.indexOf("."))
+                            + EXTENSION_TXT)));
         }
     }
 
@@ -120,7 +134,8 @@ public class DynamicCompiler {
         URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{classUrl});
         Class<?> clazz = Class.forName(gameName, true, classLoader);
         Class inputParameterType = typeManager.getTypes().get(task.getInputType());
-        Method shouldBeRanMethod = clazz.getDeclaredMethod(task.getMethodName(), inputParameterType);
+        Method shouldBeRanMethod = clazz.getDeclaredMethod(task.getMethodName(),
+                inputParameterType);
         List<Test> testList = task.getTest();
         List<TestResult> testResults = new ArrayList<>();
         runTests(testList, shouldBeRanMethod, inputParameterType, clazz, testResults);
@@ -138,7 +153,8 @@ public class DynamicCompiler {
             String result;
             try {
                 result = shouldBeRanMethod.invoke(clazz.newInstance(),
-                        (Object) parseService.parse(testList.get(i).getInputParams(), inputParameterType)).toString();
+                        (Object) parseService.parse(testList.get(i).getInputParams(),
+                                inputParameterType)).toString();
 
                 TestResult testResult = new TestResult(testList.get(i));
                 testResult.setActualResults(result);
@@ -162,14 +178,18 @@ public class DynamicCompiler {
         }
     }
 
-    //TODO replace hardCode with userId
-    public TestResultDto doEvil(String source, String sourcePath, String gameName, Task task) throws Exception {
-        Path javaFile = saveSource(source, gameName, task);
-        String str = compileSource(javaFile, gameName+"1");
-        return parseResult(str, gameName+"1", javaFile, task);
+    public TestResultDto doEvil(String source, String gameName, Task task, String sessionId) throws Exception {
+        String currentUserLogin = securityService.getCurrentUser().getLogin();
+        Path javaFile = saveSource(source, gameName, task, currentUserLogin);
+        String str = compileSource(javaFile, gameName+currentUserLogin);
+        return parseResult(str, gameName+currentUserLogin, javaFile, task, sessionId);
     }
 
-    private TestResultDto parseResult(String input, String gameName, Path javaFile, Task task) throws Exception {
+    private TestResultDto parseResult(String input,
+                                      String gameName,
+                                      Path javaFile,
+                                      Task task,
+                                      String sessionId) throws Exception {
         TestResultDto dto = new TestResultDto();
         if (input.contains(ERROR)) {
             String result;
@@ -186,6 +206,14 @@ public class DynamicCompiler {
             dto.setTestResultList(testResults);
             dto.setStatus("OK");
             dto.setExecutionTime(after-before);
+            Session session = sessionService.findOne(sessionId);
+            User currentUser = securityService.getCurrentUser();
+            if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
+                session.getSessionResult().setFirstPlayerExecutionTime(after-before);
+            } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
+                session.getSessionResult().setSecondPlayerExecutionTime(after-before);
+            }
+
             String fileNameWithoutExtension = file.getName()
                     .substring(0, file.getName().indexOf("."));
             deleteFiles(fileNameWithoutExtension);

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CompilationService {
 
-    TestResultDto compile(String code, String gameName, Task task) throws Exception;
+    TestResultDto compile(String code, String gameName, Task task, String sessionId) throws Exception;
 }

@@ -25,6 +25,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task findOne(String taskName) {
+        return taskRepository.findOne(taskName);
+    }
+
+    @Override
     public Task findById(String taskId) {
         return taskRepository.findOne(taskId);
     }

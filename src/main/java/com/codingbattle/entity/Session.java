@@ -13,6 +13,7 @@ public class Session {
     private User playerFirst;
     private User playerSecond;
     private Task task;
+    private SessionResult sessionResult;
 
     public   Session() {
     }
@@ -54,5 +55,13 @@ public class Session {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public SessionResult getSessionResult() {
+        return sessionResult;
+    }
+
+    public void setSessionResult(SessionResult sessionResult) {
+        this.sessionResult = sessionResult;
     }
 }

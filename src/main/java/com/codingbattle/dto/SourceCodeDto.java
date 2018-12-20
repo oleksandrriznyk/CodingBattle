@@ -5,6 +5,7 @@ public class SourceCodeDto {
     private String source;
     private String gameName;
     private String taskId;
+    private String sessionId;
 
     public SourceCodeDto(String source, String gameName) {
         this.source = source;
@@ -45,5 +46,13 @@ public class SourceCodeDto {
                 ", gameName='" + gameName + '\'' +
                 ", taskId='" + taskId + '\'' +
                 '}';
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }
