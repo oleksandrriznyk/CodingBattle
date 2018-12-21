@@ -4,27 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/codingbattle/Application.java" mnemonic="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dec91f00-a371-4397-9519-ab8fd29f9d33" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_fasterxml_jackson_core_jackson_core_2_8_6.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__nz_net_ultraq_thymeleaf_thymeleaf_layout_dialect_1_4_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__ognl_ognl_3_0_8.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_codehaus_groovy_groovy_2_4_7.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_boot_spring_boot_starter_thymeleaf_1_5_1_RELEASE.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_thymeleaf_thymeleaf_spring4_2_1_5_RELEASE.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/codingbattle_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/codingbattle_main.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/codingbattle_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/codingbattle_test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/App.css" afterPath="$PROJECT_DIR$/client/src/App.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/App.js" afterPath="$PROJECT_DIR$/client/src/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Home.css" afterPath="$PROJECT_DIR$/client/src/components/pages/Home.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Home.js" afterPath="$PROJECT_DIR$/client/src/components/pages/Home.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/codingbattle/compile/DynamicCompiler.java" afterPath="$PROJECT_DIR$/src/main/java/com/codingbattle/compile/DynamicCompiler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/codingbattle/controller/TaskController.java" afterPath="$PROJECT_DIR$/src/main/java/com/codingbattle/controller/TaskController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/codingbattle/controller/TestController.java" afterPath="$PROJECT_DIR$/src/main/java/com/codingbattle/controller/TestController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/codingbattle/repository/TestRepository.java" afterPath="$PROJECT_DIR$/src/main/java/com/codingbattle/repository/TestRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/codingbattle/service/TaskService.java" afterPath="$PROJECT_DIR$/src/main/java/com/codingbattle/service/TaskService.java" />
-    </list>
+    <list default="true" id="dec91f00-a371-4397-9519-ab8fd29f9d33" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
     <ignored path="$PROJECT_DIR$/out/" />
