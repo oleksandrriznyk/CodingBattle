@@ -17,15 +17,16 @@ class Signup extends Component {
     event.preventDefault();
     const data = new FormData(event.target);
     
-    fetch('/api/v1/users', {
+    fetch('/api/v1/users/sign-up', {
       method: 'POST',
       body: JSON.stringify({
         login: this.state.login,
         email: this.state.email,
         password: this.state.password
-       })
+       }),
+      headers: {'Content-Type': 'application/json'}
     }).then(function(response) {
-      return response.json();
+      console.log(response.status);
     }).then(function(data) {
 
       console.log('Test', data);
