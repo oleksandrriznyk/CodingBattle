@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Home.css';
+import './Signup.css';
 
 class Signup extends Component {
   constructor(props) {
@@ -29,14 +30,28 @@ class Signup extends Component {
       headers: {'Content-Type': 'application/json'}
     }).then(response=>response.json()
     ).then(data=>{
+      this.updateDOM(data);
       console.log('Test', data);
       this.setState({message: data.message})
       this.showMessage(this.state.message);
     });
   }
 
+  updateDOM = (data)=> {
+
+    const input = document.getElementById('login');
+    const help = document.getElementById('signUpHelp');
+    if(data.httpStatus==="409"){
+        input.classList.add("error");
+        help.classList.add("help-error");
+    } else {
+        input.classList.add("success");
+        help.classList.add("help-success");
+    }
+  }
+
   showMessage = (data) => {
-        const obj = document.getElementById("loginHelp");
+        const obj = document.getElementById("signUpHelp");
         obj.innerHTML = data;
   }
 
@@ -64,7 +79,7 @@ class Signup extends Component {
         <form onSubmit={this.handleSubmit} className="form">
         <div>
           <label><span>Login:</span> <input value={this.state.login} onChange={this.handleLoginChange} id="login" name="login" type="text"/></label>
-          <small id="loginHelp" class="form-text text-muted"></small>
+
         </div>
         <div>
           <label><span>Email:</span> <input value={this.state.email} onChange={this.handleEmailChange} id="email" name="email" type="text"/></label>
@@ -76,6 +91,7 @@ class Signup extends Component {
           <label><span>Repeat password:</span> <input value={this.state.repeatPassword} onChange={this.handleRepeatPasswordChange} type="password"/></label>
         </div>
           <input type="submit" value="Sign up" />
+          <small id="signUpHelp" class="form-text text-muted"></small>
         </form>
       </section>
     );

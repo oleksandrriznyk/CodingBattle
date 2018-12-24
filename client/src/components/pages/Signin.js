@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Home.css';
+import './Signin.css';
 
 class Signin extends Component {
 
@@ -22,11 +23,20 @@ class Signin extends Component {
             password: this.state.password
         })
     }).then(function(response){
-        console.log(response.headers.get("authorization"));
+        if(response.status===401){
+            throw Error("Invalid login or password");
+        }
+        sessionStorage.setItem('token', response.headers.get("authorization"))
+        console.log(sessionStorage.getItem('token'))
     }).then(function(data){
         console.log('Test', data);
-        debugger;
-    })
+    }).catch(err=>this.updateDOM(err));
+  }
+
+  updateDOM = (err)=>{
+    const help = document.getElementById('loginHelp');
+    help.classList.add('login-err');
+    help.innerHTML=err.message;
   }
 
   handleLoginChange = (event) => {
@@ -43,9 +53,12 @@ class Signin extends Component {
         <h1>Sign in</h1> 
 
         <form onSubmit={this.handleSubmit} className="form">
+
           <label><span>Login:</span> <input type="text" value={this.state.login} onChange={this.handleLoginChange} id="login" name="login"/></label>
           <label><span>Password:</span> <input type="password" value={this.state.password} onChange={this.handlePasswordChange} id="password" name="password"/></label>
+
           <input type="submit" value="Log in" />
+          <small id="loginHelp"></small>
         </form>
       </section>
     );

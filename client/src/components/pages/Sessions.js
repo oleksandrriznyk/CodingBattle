@@ -13,7 +13,8 @@ class Sessions extends Component {
         this.match = props.match;
         this.state = {
             sessions: [],
-            acceptedSessionId: ''
+            acceptedSessionId: '',
+            token: sessionStorage.getItem('token')
         };
         this.createSession = this.createSession.bind(this);
     }
@@ -25,7 +26,7 @@ class Sessions extends Component {
     getAllSessions = () => {
         fetch('/api/v1/sessions/all', {
             method: 'GET',
-            headers: {'Authorization' : 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6eW1hcmV2MyIsImV4cCI6MTU0NTMzODMxM30.5-h_UQE-ZfMMU6xCr3Tvq_dCgYTbHBb3t8GaWQhH_00wFVAngIWF3BqrXAPanzrkZUMJv4AGOOZ9-uqWxymHKw'}
+            headers: {'Authorization' : this.state.token}
             })
             .then(response => response.json())
             .then(data => {
@@ -42,7 +43,7 @@ class Sessions extends Component {
             links.push(
                 <li className="session">
                     <Link to={link}>{item.playerFirst.login}</Link>
-                    <button className="button-accept" onClick={this.connect}>Accept</button>
+                    <button className="button-accept" onClick={this.connect} value={item.id}>Accept</button>
                 </li>
             )
         }
@@ -53,27 +54,26 @@ class Sessions extends Component {
 
         fetch('api/v1/sessions/prepareSession', {
             method: 'POST',
-            headers: {'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6eW1hcmV2MyIsImV4cCI6MTU0NTMzODMxM30.5-h_UQE-ZfMMU6xCr3Tvq_dCgYTbHBb3t8GaWQhH_00wFVAngIWF3BqrXAPanzrkZUMJv4AGOOZ9-uqWxymHKw'}
+            headers: {'Authorization': this.state.token}
             })
             .then(response=>response.json())
             .then(data=> {
+                console.log(data)
                 this.setState({acceptedSessionId: data.id})
                 console.log(this.state.acceptedSessionId)
             })
             .catch(err => console.error(err.toString()));
-            this.connect();
     }
 
-    connect = () => {
-        var socket = new SockJS('/api/v1/sessions/gs-codingbattle');
-        var stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messages', function(message) {
-                console.log(JSON.parse(message.body));
-            });
-        });
-
+    connect = (event) => {
+        const sessionId = event.target.value;
+        fetch(`api/v1/sessions/connect?sessionId=${sessionId.toString()}`, {
+            method: 'GET',
+            headers: {'Authorization': this.state.token},
+        })
+        .then(response=>response.json())
+        .then(data=>console.log(data))
+        .catch(err=>console.log(err.toString()));
     }
 
     render() {

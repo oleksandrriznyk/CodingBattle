@@ -8,31 +8,30 @@ import com.codingbattle.entity.User;
 import com.codingbattle.security.service.SecurityService;
 import com.codingbattle.service.SessionService;
 import com.codingbattle.service.TaskService;
+import com.codingbattle.worker.PlayersSync;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @RestController
 @RequestMapping("/api/v1/sessions")
 public class SessionController {
 
     private static final String SESSION_RESULT_DRAW = "DRAW";
+    private static final Long THREE_MINUTES = 1000*15L;
 
     @Autowired
     private SessionService sessionService;
@@ -43,16 +42,26 @@ public class SessionController {
     @Autowired
     private SecurityService securityService;
 
-    CountDownLatch countDownLatch = new CountDownLatch(2);
-    ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+    @Autowired
+    private PlayersSync playersSync;
 
     @PostMapping("/prepareSession")
-    public Session prepareSession() throws InterruptedException {
+    public DeferredResult<ResponseEntity<?>> prepareSession() throws InterruptedException {
 
+        DeferredResult<ResponseEntity<?>> unconnectedSession = new DeferredResult<>(THREE_MINUTES);
         User playerOne = securityService.getCurrentUser();
         Task task = taskService.findRandom();
         UUID sessionId = UUID.randomUUID();
-        return sessionService.save(new Session(sessionId, playerOne, null, task));
+        Session session = sessionService.save(new Session(sessionId, playerOne, null, task));
+        playersSync.add(sessionId.toString(), unconnectedSession);
+        unconnectedSession.onTimeout(()-> {
+            playersSync.delete(sessionId.toString());
+            sessionService.delete(session);
+            unconnectedSession.setResult(ResponseEntity.ok("Session has been expired"));
+        });
+        unconnectedSession.onCompletion(()->ResponseEntity.ok(task));
+
+        return unconnectedSession;
     }
 
     @GetMapping("/{sessionId}")
@@ -61,15 +70,15 @@ public class SessionController {
     }
 
     @GetMapping("/connect")
-    public String connect(@RequestParam("sessionId") String sessionId) throws InterruptedException {
-
-
-        Session session = sessionService.findOne(sessionId);
-
-        User playerSecond = securityService.getCurrentUser();
-        session.setPlayerSecond(playerSecond);
-        sessionService.save(session);
-        return ("redirect:/api/v1/sessions/gs-codingbattle/"+sessionId);
+    public DeferredResult<ResponseEntity<?>> connect(@RequestParam("sessionId") String sessionId) throws InterruptedException {
+        DeferredResult deferredResult = playersSync.get(sessionId);
+        if(deferredResult!=null){
+            Session session = sessionService.findOne(sessionId);
+            User playerSecond = securityService.getCurrentUser();
+            session.setPlayerSecond(playerSecond);
+            deferredResult.setResult(ResponseEntity.ok(session.getTask()));
+        }
+        return deferredResult;
     }
 
     @MessageMapping("/gs-codingbattle/{topic}")
@@ -109,7 +118,7 @@ public class SessionController {
     }
 
     @GetMapping("/delete/{sessionId}")
-    public ResponseEntity deleteSession(@PathVariable String sessionId) {
+    public ResponseEntity<String> deleteSession(@PathVariable String sessionId) {
         User currentUser = securityService.getCurrentUser();
         Session session = sessionService.findOne(sessionId);
         if (session.getPlayerFirst().equals(currentUser)) {

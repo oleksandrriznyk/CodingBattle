@@ -1,17 +1,32 @@
 package com.codingbattle.worker;
 
-import java.util.concurrent.CountDownLatch;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.async.DeferredResult;
 
-public class PlayersSync implements Runnable {
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
-    private CountDownLatch countDownLatch = new CountDownLatch(2);
+@Component
+public class PlayersSync {
 
-    @Override
-    public void run() {
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    Map<String, DeferredResult<ResponseEntity<?>>> unconnected;
+
+    @PostConstruct
+    private void init(){
+        unconnected = new HashMap<>();
+    }
+
+    public void add(String key, DeferredResult<ResponseEntity<?>> value){
+        unconnected.put(key, value);
+    }
+
+    public DeferredResult<ResponseEntity<?>> get(String key){
+        return unconnected.get(key);
+    }
+
+    public void delete(String key){
+        unconnected.remove(key);
     }
 }
