@@ -1,5 +1,6 @@
 package com.codingbattle.controller;
 
+import com.codingbattle.dto.ResponseDto;
 import com.codingbattle.entity.User;
 import com.codingbattle.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -38,11 +39,13 @@ public class UserController {
     public ResponseEntity signUp(@RequestBody User user) {
         User existedUser = userService.findOne(user.getLogin());
         if(existedUser!=null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ALREADY_EXISTS);
+            ResponseDto error = new ResponseDto(HttpStatus.CONFLICT.toString(), ALREADY_EXISTS);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(SUCCESSFUL_REGISTRATION);
+        ResponseDto response = new ResponseDto(HttpStatus.OK.toString(), SUCCESSFUL_REGISTRATION);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }
