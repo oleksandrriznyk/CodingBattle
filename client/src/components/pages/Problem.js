@@ -14,8 +14,16 @@ class Problem extends Component {
   }
 
   componentDidMount() {
-    this.getTaskByID();
+    const taskId = this.props.location.state.data.id || this.match.params.problemId;
+
+    this.setState({
+      task: this.props.location.state.data
+    }, this.codeFlaskInit)
+    
+    // debugger;
+    // this.getTaskByID(taskId);
     // flask.addLanguage('java', options)
+
   }
 
   codeFlaskInit() {
@@ -24,8 +32,8 @@ class Problem extends Component {
     })
   }
 
-  getTaskByID = () => {
-    fetch(`/api/v1/tasks/${this.match.params.problemId}`)
+  getTaskByID = (taskId) => {
+    fetch(`/api/v1/tasks/${taskId}`)
       .then(response => response.json())
       .then(data => {
         this.setState({task: data }, this.codeFlaskInit)
@@ -66,7 +74,7 @@ class Problem extends Component {
         </div>
 
         <div className="code" id="code">
-          {this.state.task.startCode}       
+          { `${this.state.task.startCode}` }       
         </div>
 
         <div className="problem-footer">

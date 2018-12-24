@@ -12,6 +12,31 @@ import Signin from "./components/pages/Signin";
 import Signup from "./components/pages/Signup";
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isAutorizate: false,
+      login: ''
+    }
+  }
+
+  componentDidUpdate() {
+    // console.log(sessionStorage)
+  }
+
+  handleLogOut = () => {
+    // TO DO log out
+  }
+
+  setSessionStorage = (token, login) => {
+    sessionStorage.setItem('token', token);
+    console.log(sessionStorage.getItem('token'));
+    this.setState({
+      isAutorizate: true,
+      login: login
+    });
+  }
+  
   render() {
     return (
       <Router>
@@ -27,9 +52,9 @@ class App extends Component {
           </nav>
 
           <div className="profile">
-            <Link to="/profile">Profile</Link>
-            <Link to="/signin">Sign in</Link>
-            <Link to="/signup">Sign up</Link>
+            { this.state.isAutorizate && [<Link to="/profile">{this.state.login}</Link>, <div className='btn -logout' onClick={this.handleLogOut}>Log out</div>]}
+            { !this.state.isAutorizate && [<Link to="/signin">Sign in</Link>,<Link to="/signup">Sign up</Link>] }
+            
           </div>
         </header>
 
@@ -38,7 +63,7 @@ class App extends Component {
           <Route path="/problems" component={Problems} />
           <Route path="/profile" component={Profile} />
           <Route path="/sessions" component={Sessions} />
-          <Route path="/signin" component={Signin} />
+          <Route path="/signin" render={()=><Signin setSessionStorage={this.setSessionStorage}/>} />
           <Route path="/signup" component={Signup} />
         </main>
       </div>

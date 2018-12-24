@@ -33,7 +33,7 @@ class Signup extends Component {
       this.updateDOM(data);
       console.log('Test', data);
       this.setState({message: data.message})
-      this.showMessage(this.state.message);
+      this.showMessage(this.state.message); 
     });
   }
 

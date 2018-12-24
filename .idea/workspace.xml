@@ -4,7 +4,19 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/codingbattle/Application.java" mnemonic="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dec91f00-a371-4397-9519-ab8fd29f9d33" name="Default" comment="" />
+    <list default="true" id="dec91f00-a371-4397-9519-ab8fd29f9d33" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/package-lock.json" afterPath="$PROJECT_DIR$/client/package-lock.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/package.json" afterPath="$PROJECT_DIR$/client/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/App.css" afterPath="$PROJECT_DIR$/client/src/App.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/App.js" afterPath="$PROJECT_DIR$/client/src/App.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Problem.js" afterPath="$PROJECT_DIR$/client/src/components/pages/Problem.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Problems.js" afterPath="$PROJECT_DIR$/client/src/components/pages/Problems.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Sessions.css" afterPath="$PROJECT_DIR$/client/src/components/pages/Sessions.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Sessions.js" afterPath="$PROJECT_DIR$/client/src/components/pages/Sessions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Signin.js" afterPath="$PROJECT_DIR$/client/src/components/pages/Signin.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/components/pages/Signup.js" afterPath="$PROJECT_DIR$/client/src/components/pages/Signup.js" />
+    </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -39,7 +51,7 @@
               <caret line="53" column="42" lean-forward="false" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1545340195348" expanded="true" signature="5059:5067" ph="{...}" />
+                <marker date="1545667004499" expanded="true" signature="5641:5649" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -125,10 +137,10 @@
       <file leaf-file-name="UserController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/codingbattle/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="33" column="32" lean-forward="false" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
+            <state relative-caret-position="510">
+              <caret line="34" column="32" lean-forward="false" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
               <folding>
-                <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+                <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -140,8 +152,8 @@
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
-                <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-                <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+                <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+                <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
               </folding>
             </state>
           </provider>
@@ -802,12 +814,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.427" sideWeight="0.38869047" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.427" sideWeight="0.6113095" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.427" sideWeight="0.6113095" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22380953" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22380953" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -907,7 +919,7 @@
           <caret line="35" column="42" lean-forward="false" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1545340195348" expanded="true" signature="5059:5067" ph="{...}" />
+            <marker date="1545667004499" expanded="true" signature="5641:5649" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -959,7 +971,7 @@
         <state relative-caret-position="270">
           <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -969,8 +981,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -996,7 +1008,7 @@
         <state relative-caret-position="270">
           <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1006,8 +1018,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1018,7 +1030,7 @@
           <caret line="35" column="35" lean-forward="false" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1545340195348" expanded="true" signature="5059:5067" ph="{...}" />
+            <marker date="1545667004499" expanded="true" signature="5641:5649" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1044,7 +1056,7 @@
         <state relative-caret-position="270">
           <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1054,8 +1066,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1073,8 +1085,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1084,8 +1096,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1111,7 +1123,7 @@
         <state relative-caret-position="270">
           <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1122,7 +1134,7 @@
           <caret line="35" column="42" lean-forward="false" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1545340195348" expanded="true" signature="5059:5067" ph="{...}" />
+            <marker date="1545667004499" expanded="true" signature="5641:5649" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1182,7 +1194,7 @@
         <state relative-caret-position="270">
           <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1192,8 +1204,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1204,7 +1216,7 @@
           <caret line="35" column="35" lean-forward="false" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1545340195348" expanded="true" signature="5059:5067" ph="{...}" />
+            <marker date="1545667004499" expanded="true" signature="5641:5649" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1230,7 +1242,7 @@
         <state relative-caret-position="270">
           <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1240,8 +1252,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1259,8 +1271,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1270,8 +1282,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1545330735880" expanded="true" signature="81:316" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
-            <marker date="1545330735880" expanded="true" signature="331:525" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="81:340" ph="{&quot;codeflask&quot;: &quot;^1.3.0&quot;...}" />
+            <marker date="1545678084556" expanded="true" signature="355:549" ph="{&quot;start&quot;: &quot;react-scripts start&quot;...}" />
           </folding>
         </state>
       </provider>
@@ -1286,10 +1298,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/codingbattle/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="33" column="32" lean-forward="false" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
+        <state relative-caret-position="510">
+          <caret line="34" column="32" lean-forward="false" selection-start-line="34" selection-start-column="32" selection-end-line="34" selection-end-column="32" />
           <folding>
-            <marker date="1545330735899" expanded="true" signature="1815:1823" ph="{...}" />
+            <marker date="1545667004500" expanded="true" signature="2028:2036" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -1300,7 +1312,7 @@
           <caret line="53" column="42" lean-forward="false" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1545340195348" expanded="true" signature="5059:5067" ph="{...}" />
+            <marker date="1545667004499" expanded="true" signature="5641:5649" ph="{...}" />
           </folding>
         </state>
       </provider>

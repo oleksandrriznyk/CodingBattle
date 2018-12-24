@@ -17,6 +17,10 @@ class Problems extends Component {
     this.getAllTasks();
   }
 
+  componentDidCatch = () => {
+      window.location.href = "/signin";
+  }
+
   getAllTasks = () => {
     fetch('/api/v1/tasks/all')
       .then(response => response.json())

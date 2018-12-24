@@ -6,6 +6,7 @@ import { Stomp } from "@stomp/stompjs";
 import './Sessions.css';
 import Session from './Session';
 
+import { Redirect } from 'react-router-dom'
 
 class Sessions extends Component {
     constructor(props){
@@ -14,7 +15,10 @@ class Sessions extends Component {
         this.state = {
             sessions: [],
             acceptedSessionId: '',
-            token: sessionStorage.getItem('token')
+            token: sessionStorage.getItem('token'),
+            showWait: false,
+            redirect: false,
+            taskData: {}
         };
         this.createSession = this.createSession.bind(this);
     }
@@ -42,15 +46,26 @@ class Sessions extends Component {
             let link = `${this.match.url}/${item.id}`;
             links.push(
                 <li className="session">
-                    <Link to={link}>{item.playerFirst.login}</Link>
-                    <button className="button-accept" onClick={this.connect} value={item.id}>Accept</button>
+                    <Link className="session__link" to={link}>{item.playerFirst.login}</Link>
+                    <button className="session__button" onClick={this.connect} value={item.id}>Accept</button>
                 </li>
             )
         }
         return links;
     }
 
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to={{ pathname: '/problems/1', state: { data: this.state.taskData} }} />
+        }
+    }
+
+    componentDidCatch = () => {
+        window.location.href = "/signin";
+    }
+
     createSession = () => {
+        this.setState({ showWait: true});
 
         fetch('api/v1/sessions/prepareSession', {
             method: 'POST',
@@ -58,11 +73,20 @@ class Sessions extends Component {
             })
             .then(response=>response.json())
             .then(data=> {
+                this.setState({ showWait: false});
                 console.log(data)
-                this.setState({acceptedSessionId: data.id})
-                console.log(this.state.acceptedSessionId)
+                this.setState({
+                    acceptedSessionId: data.id,
+                    redirect: true,
+                    taskData: data
+                });
+                console.log(this.state.acceptedSessionId);
             })
             .catch(err => console.error(err.toString()));
+    }
+
+    rejectCreation = () => {
+        this.setState({ showWait: false});
     }
 
     connect = (event) => {
@@ -79,13 +103,15 @@ class Sessions extends Component {
     render() {
         return (
             <section>
+                {this.renderRedirect()}
                 <Route path={`${this.match.path}/:sessionId`} component={Session} />
                 <Route
                     exact
                     path={this.match.path}
                     render={()=> <div>
+                        { this.state.showWait && <div className="wait">Ожидание соперника <div className="wait__button" onClick={this.rejectCreation}>Cancel</div></div>}
                         <h1>Sessions
-                            <button onClick={this.createSession}>Create Session</button></h1>
+                            <button className="btn -create-session" onClick={this.createSession}>Create session</button></h1>
                         <ul className="session-list">
                             { this.renderLinks() }
                         </ul>

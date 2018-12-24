@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './Home.css';
 import './Signin.css';
 
+import { Redirect } from 'react-router-dom';
+
 class Signin extends Component {
 
     constructor(props){
@@ -9,12 +11,16 @@ class Signin extends Component {
         this.state = {
             login: '',
             password: '',
-            authorizationToken: ''
+            authorizationToken: '',
+            redirect: false
         }
     }
+
   handleSubmit = (event) =>{
     event.preventDefault();
     const data = new FormData(event.target);
+
+    const that = this;
 
     fetch('/login', {
         method: 'POST',
@@ -22,12 +28,13 @@ class Signin extends Component {
             login: this.state.login,
             password: this.state.password
         })
-    }).then(function(response){
+    }).then((response) => {
         if(response.status===401){
             throw Error("Invalid login or password");
         }
-        sessionStorage.setItem('token', response.headers.get("authorization"))
-        console.log(sessionStorage.getItem('token'))
+        that.props.setSessionStorage(response.headers.get("authorization"), this.state.login);    
+        // browserHistory.push('/sessions');   
+        that.setState({ redirect: true });
     }).then(function(data){
         console.log('Test', data);
     }).catch(err=>this.updateDOM(err));
@@ -47,9 +54,16 @@ class Signin extends Component {
     this.setState({password: event.target.value});
   }
 
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/sessions' />
+    }
+  }
+
   render() {
     return (
       <section>
+        {this.renderRedirect()}
         <h1>Sign in</h1> 
 
         <form onSubmit={this.handleSubmit} className="form">
@@ -57,7 +71,7 @@ class Signin extends Component {
           <label><span>Login:</span> <input type="text" value={this.state.login} onChange={this.handleLoginChange} id="login" name="login"/></label>
           <label><span>Password:</span> <input type="password" value={this.state.password} onChange={this.handlePasswordChange} id="password" name="password"/></label>
 
-          <input type="submit" value="Log in" />
+          <input type="submit" value="Log in" />&emsp;
           <small id="loginHelp"></small>
         </form>
       </section>

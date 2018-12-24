@@ -27,6 +27,8 @@ header {
 
 .profile {
   margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 .profile > *:not(:last-child) {
   margin-right: 16px;
@@ -55,4 +57,9 @@ nav {
 }
 nav > *:not(:last-child) {
   margin-right: 16px;
+}
+
+.btn.-logout {
+  font-size: 14px;
+  cursor: pointer;
 }
