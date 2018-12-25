@@ -96,7 +96,13 @@ class Sessions extends Component {
             headers: {'Authorization': this.state.token},
         })
         .then(response=>response.json())
-        .then(data=>console.log(data))
+        .then(data=>{
+            this.setState({
+                acceptedSessionId: data.id,
+                redirect: true,
+                taskData: data
+            })
+        })
         .catch(err=>console.log(err.toString()));
     }
 

@@ -31,7 +31,7 @@ import java.util.UUID;
 public class SessionController {
 
     private static final String SESSION_RESULT_DRAW = "DRAW";
-    private static final Long THREE_MINUTES = 1000*15L;
+    private static final Long THREE_MINUTES = 1000 * 60 * 3L;
 
     @Autowired
     private SessionService sessionService;
@@ -46,7 +46,7 @@ public class SessionController {
     private PlayersSync playersSync;
 
     @PostMapping("/prepareSession")
-    public DeferredResult<ResponseEntity<?>> prepareSession() throws InterruptedException {
+    public DeferredResult<ResponseEntity<?>> prepareSession() {
 
         DeferredResult<ResponseEntity<?>> unconnectedSession = new DeferredResult<>(THREE_MINUTES);
         User playerOne = securityService.getCurrentUser();
@@ -54,26 +54,39 @@ public class SessionController {
         UUID sessionId = UUID.randomUUID();
         Session session = sessionService.save(new Session(sessionId, playerOne, null, task));
         playersSync.add(sessionId.toString(), unconnectedSession);
-        unconnectedSession.onTimeout(()-> {
+        unconnectedSession.onTimeout(() -> {
             playersSync.delete(sessionId.toString());
             sessionService.delete(session);
             unconnectedSession.setResult(ResponseEntity.ok("Session has been expired"));
         });
-        unconnectedSession.onCompletion(()->ResponseEntity.ok(task));
+        unconnectedSession.onCompletion(() -> ResponseEntity.ok(task));
 
         return unconnectedSession;
     }
 
     @GetMapping("/{sessionId}")
-    public Session getById(@PathVariable String sessionId){
+    public Session getById(@PathVariable String sessionId) {
         return sessionService.findOne(sessionId);
     }
 
     @GetMapping("/connect")
-    public DeferredResult<ResponseEntity<?>> connect(@RequestParam("sessionId") String sessionId) throws InterruptedException {
+    public DeferredResult<ResponseEntity<?>> connect(@RequestParam("sessionId") String sessionId) {
         DeferredResult deferredResult = playersSync.get(sessionId);
-        if(deferredResult!=null){
+        if (deferredResult != null) {
             Session session = sessionService.findOne(sessionId);
+            User playerSecond = securityService.getCurrentUser();
+            session.setPlayerSecond(playerSecond);
+            deferredResult.setResult(ResponseEntity.ok(session.getTask()));
+        }
+        return deferredResult;
+    }
+
+    @GetMapping("/connectByLogin")
+    public DeferredResult<ResponseEntity<?>> conncetByLogin(@RequestParam("login") String login) {
+        Session session = sessionService.findAllWithOnePlayer().stream().filter(s -> s.getPlayerFirst().getLogin().equals(login)).findFirst().get();
+
+        DeferredResult deferredResult = playersSync.get(session.getId().toString());
+        if (deferredResult != null) {
             User playerSecond = securityService.getCurrentUser();
             session.setPlayerSecond(playerSecond);
             deferredResult.setResult(ResponseEntity.ok(session.getTask()));
@@ -86,7 +99,7 @@ public class SessionController {
     public TaskDto sessionStart(@DestinationVariable String topic) {
         Session session = sessionService.findOne(topic);
         User playerOne = securityService.getCurrentUser();
-        if(session==null){
+        if (session == null) {
             Task task = taskService.findRandom();
             sessionService.save(new Session(UUID.fromString(topic), playerOne, null, task));
         } else {
@@ -130,9 +143,10 @@ public class SessionController {
     }
 
     @GetMapping("/delete/all")
-    public void deleteAllSessions(){
+    public void deleteAllSessions() {
         List<Session> sessions = sessionService.findAll();
         sessionService.deleteAll();
     }
+
 
 }
