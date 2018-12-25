@@ -116,7 +116,7 @@ class Problem extends Component {
     if(this.state.tests.testResultList) {
       for (let item of this.state.tests.testResultList ) {
         testsArr.push(<div className="test">
-          <pre>{
+          <pre className={item.passed === true ? 'test--true' : 'test--false'}>{
             `actualResults: ${item.actualResults}
 id: ${ item.id }
 inputParams: ${ item.inputParams }
@@ -149,7 +149,7 @@ passed: ${ item.passed } `
       // получаю имя победителя
         
        that.setState({
-         winner: data.winnerLogin
+         winner: data.sessionResult.winnerLogin
        });
 
      }
@@ -159,14 +159,15 @@ passed: ${ item.passed } `
   endGameWindow = () => {
     return <div className="wait">
       Соревнование закончилось
-      { this.state.winner ? <div>Ожидание соперника</div> : <div>Победил {this.state.winner}</div>}
+      { this.state.winner ? <div className="winner-name">Победил {this.state.winner === 'DRAW' ? 'Дружба' : this.state.winner}</div> : <div className="winner-wait">Ожидание соперника</div>}
     </div>
   }
   
   render() {
     return (
+      <div className="problem-wrap">
       <section>
-        {this.state.endGame /*&& this.endGameWindow()*/}
+        {this.state.endGame && this.endGameWindow()}
 
         <div className="problem-info">
           <h2>Task #{this.match.params.problemId}</h2>
@@ -181,10 +182,12 @@ passed: ${ item.passed } `
           <input className="problem-footer__submit" onClick={this.handleSubmitCode} type="button" value="Submit"/>
         </div>
 
-        <div className="problem-tests">
+      </section>
+
+      <div className="problem-tests">
           { this.renderTests() }
         </div>
-      </section>
+      </div>
     );
   }
 }
