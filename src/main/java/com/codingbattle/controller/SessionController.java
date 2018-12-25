@@ -1,6 +1,5 @@
 package com.codingbattle.controller;
 
-import com.codingbattle.dto.TaskDto;
 import com.codingbattle.entity.Session;
 import com.codingbattle.entity.SessionResult;
 import com.codingbattle.entity.Task;
@@ -12,9 +11,6 @@ import com.codingbattle.worker.PlayersSync;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -105,6 +101,7 @@ public class SessionController {
         } else {
             session.getSessionResult().setWinnerLogin(SESSION_RESULT_DRAW);
         }
+        sessionService.save(session);
         return session.getSessionResult();
     }
 
