@@ -205,12 +205,14 @@ public class DynamicCompiler {
             dto.setExecutionTime((after-before)*1000);
             Session session = sessionService.findOne(sessionId);
             User currentUser = securityService.getCurrentUser();
-            session.setSessionResult(new SessionResult(session.getPlayerFirst().getLogin(), session.getPlayerSecond().getLogin()));
+            session.getSessionResult().setFirstPlayerLogin(session.getPlayerFirst().getLogin());
+            session.getSessionResult().setSecondPlayerLogin(session.getPlayerSecond().getLogin());
             if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
                 session.getSessionResult().setFirstPlayerExecutionTime((after-before)*1000);
             } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
                 session.getSessionResult().setSecondPlayerExecutionTime((after-before)*1000);
             }
+            sessionService.save(session);
 
             String fileNameWithoutExtension = file.getName()
                     .substring(0, file.getName().indexOf("."));

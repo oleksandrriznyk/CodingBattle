@@ -21,6 +21,14 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Session save(Session session) {
+        Session tempSession  = sessionRepository.findOne(session.getId());
+        if(tempSession!=null){
+            tempSession.setPlayerSecond(session.getPlayerSecond());
+            tempSession.setPlayerFirst(session.getPlayerFirst());
+            tempSession.setSessionResult(session.getSessionResult());
+            tempSession.setTask(session.getTask());
+            return sessionRepository.save(tempSession);
+        }
         return sessionRepository.save(session);
     }
 

@@ -137,19 +137,17 @@ passed: ${ item.passed } `
   // Выполняется если все тесты зашли
   submitResults = () => {
     const that = this;
+    const currentSessionId = this.props.location.state.sessionId;
 
-    fetch(`/api/v1/sessions/${this.props.location.state.sessionId}/end`, { 
-      method: 'POST',
+    fetch(`/api/v1/sessions/${currentSessionId}/submit`, {
+      method: 'GET',
       headers: {'Content-Type':'application/json', 'Authorization': this.state.token},
-      body: JSON.stringify({
-       time: this.state.time,
-      })
      })
      .then(response => response.json())
      .then( (data) => {
-
+                console.log(data);
       // получаю имя победителя
-        debugger;
+        
        that.setState({
          winner: data.winnerLogin
        });
@@ -168,7 +166,7 @@ passed: ${ item.passed } `
   render() {
     return (
       <section>
-        {this.state.endGame && this.endGameWindow()}
+        {this.state.endGame /*&& this.endGameWindow()*/}
 
         <div className="problem-info">
           <h2>Task #{this.match.params.problemId}</h2>
