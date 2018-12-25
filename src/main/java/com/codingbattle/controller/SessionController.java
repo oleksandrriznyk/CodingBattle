@@ -71,6 +71,7 @@ public class SessionController {
             Session session = sessionService.findOne(sessionId);
             User playerSecond = securityService.getCurrentUser();
             session.setPlayerSecond(playerSecond);
+            sessionService.save(session);
             deferredResult.setResult(ResponseEntity.ok(sessionService.save(session)));
         }
         return deferredResult;
@@ -90,7 +91,7 @@ public class SessionController {
     }
 
     @GetMapping("/{sessionId}/end")
-    public SessionResult sessionEnd(@RequestParam String sessionId) {
+    public SessionResult sessionEnd(@PathVariable String sessionId) {
         Session session = sessionService.findOne(sessionId);
         if (session.getSessionResult().getFirstPlayerExecutionTime()
                 < session.getSessionResult().getSecondPlayerExecutionTime()) {
