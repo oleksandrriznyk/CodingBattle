@@ -56,7 +56,7 @@ class Sessions extends Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
-            return <Redirect to={{ pathname: '/problems/1', state: { data: this.state.taskData} }} />
+            return <Redirect to={{ pathname: '/problems/1', state: { data: this.state.taskData, sessionId: this.state.acceptedSessionId} }} />
         }
     }
 

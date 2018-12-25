@@ -187,19 +187,29 @@ public class DynamicCompiler {
 
         } else {
             Path classFile = Paths.get(compileSource(javaFile, gameName));
-            long before = System.currentTimeMillis();
-            List<TestResult> testResults = runClass(classFile, gameName, task);
-            long after = System.currentTimeMillis();
+            long before=0L;
+            long after=0L;
+            List<TestResult> testResults = new ArrayList<>();
+            for(int i=0;i<2;i++){
+                if(i==1){
+                    before = System.currentTimeMillis();
+                    testResults = runClass(classFile, gameName, task);
+                    after = System.currentTimeMillis();
+                } else {
+                    runClass(classFile, gameName, task);
+                }
+            }
             File file = new File(classFile.toString());
             dto.setTestResultList(testResults);
             dto.setStatus("OK");
-            dto.setExecutionTime(after-before);
+            dto.setExecutionTime((after-before)*1000);
             Session session = sessionService.findOne(sessionId);
             User currentUser = securityService.getCurrentUser();
+            session.setSessionResult(new SessionResult(session.getPlayerFirst().getLogin(), session.getPlayerSecond().getLogin()));
             if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
-                session.getSessionResult().setFirstPlayerExecutionTime(after-before);
+                session.getSessionResult().setFirstPlayerExecutionTime((after-before)*1000);
             } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
-                session.getSessionResult().setSecondPlayerExecutionTime(after-before);
+                session.getSessionResult().setSecondPlayerExecutionTime((after-before)*1000);
             }
 
             String fileNameWithoutExtension = file.getName()

@@ -9,15 +9,15 @@ class Problem extends Component {
     
     this.state = {
       flask: {},
-      task: {}
+      task: {},
+      token: sessionStorage.getItem('token')
     }
   }
 
   componentDidMount() {
-    const taskId = this.props.location.state.data.id || this.match.params.problemId;
 
     this.setState({
-      task: this.props.location.state.data
+      task: this.props.location.state.data.task
     }, this.codeFlaskInit)
     
     // debugger;
@@ -42,25 +42,28 @@ class Problem extends Component {
   }
 
   handleSubmitCode = (event) => {
+    const currentSessionId = this.props.location.state.sessionId;
+
     const code = this.state.flask.getCode();
     const methodName = this.state.task.methodName;
+    console.log(currentSessionId);
 
     console.log(code)
     event.preventDefault();
-    fetch('http://localhost:8080/api/v1/compilation/compile', {
-     method: 'post',
-     headers: {'Content-Type':'application/json'},
+    fetch('api/v1/compilation/compile', {
+     method: 'POST',
+     headers: {'Content-Type':'application/json', 'Authorization': this.state.token},
      body: JSON.stringify({
       source: code,
       gameName: methodName,
-      taskId: this.match.params.problemId.toString()
+      taskId: this.state.task.id,
+      sessionId: currentSessionId
      })
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
 
       console.log('Test', data);
-      debugger;
     });
   }
   
@@ -70,7 +73,6 @@ class Problem extends Component {
         <div className="problem-info">
           <h2>Task #{this.match.params.problemId}</h2>
           <p>{this.state.task.taskText}</p>
-          <p>{this.state.task.inputType}</p>
         </div>
 
         <div className="code" id="code">

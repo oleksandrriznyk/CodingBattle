@@ -52,14 +52,13 @@ public class SessionController {
         User playerOne = securityService.getCurrentUser();
         Task task = taskService.findRandom();
         UUID sessionId = UUID.randomUUID();
-        Session session = sessionService.save(new Session(sessionId, playerOne, null, task));
+        Session session = sessionService.save(new Session(sessionId.toString(), playerOne, null, task));
         playersSync.add(sessionId.toString(), unconnectedSession);
         unconnectedSession.onTimeout(() -> {
             playersSync.delete(sessionId.toString());
-            sessionService.delete(session);
             unconnectedSession.setResult(ResponseEntity.ok("Session has been expired"));
         });
-        unconnectedSession.onCompletion(() -> ResponseEntity.ok(task));
+        unconnectedSession.onCompletion(() -> ResponseEntity.ok(session));
 
         return unconnectedSession;
     }
@@ -76,7 +75,7 @@ public class SessionController {
             Session session = sessionService.findOne(sessionId);
             User playerSecond = securityService.getCurrentUser();
             session.setPlayerSecond(playerSecond);
-            deferredResult.setResult(ResponseEntity.ok(session.getTask()));
+            deferredResult.setResult(ResponseEntity.ok(sessionService.save(session)));
         }
         return deferredResult;
     }
@@ -92,22 +91,6 @@ public class SessionController {
             deferredResult.setResult(ResponseEntity.ok(session.getTask()));
         }
         return deferredResult;
-    }
-
-    @MessageMapping("/gs-codingbattle/{topic}")
-    @SendTo("/topic/messages")
-    public TaskDto sessionStart(@DestinationVariable String topic) {
-        Session session = sessionService.findOne(topic);
-        User playerOne = securityService.getCurrentUser();
-        if (session == null) {
-            Task task = taskService.findRandom();
-            sessionService.save(new Session(UUID.fromString(topic), playerOne, null, task));
-        } else {
-            session.setPlayerSecond(playerOne);
-            sessionService.save(session);
-        }
-        return new TaskDto(session.getTask(), session.getId().toString());
-
     }
 
     @GetMapping("/{sessionId}/end")
@@ -144,7 +127,6 @@ public class SessionController {
 
     @GetMapping("/delete/all")
     public void deleteAllSessions() {
-        List<Session> sessions = sessionService.findAll();
         sessionService.deleteAll();
     }
 

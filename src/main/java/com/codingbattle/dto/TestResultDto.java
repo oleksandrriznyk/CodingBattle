@@ -9,7 +9,7 @@ public class TestResultDto {
 
     private List<TestResult> testResultList;
     private String status;
-    private double executionTime;
+    private Long executionTime;
 
     public List<TestResult> getTestResultList() {
         return testResultList;
@@ -27,11 +27,11 @@ public class TestResultDto {
         this.status = status;
     }
 
-    public double getExecutionTime() {
+    public Long getExecutionTime() {
         return executionTime;
     }
 
-    public void setExecutionTime(double executionTime) {
+    public void setExecutionTime(Long executionTime) {
         this.executionTime = executionTime;
     }
 }

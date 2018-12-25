@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Session {
 
     @Id
-    private UUID id;
+    private String id;
     private User playerFirst;
     private User playerSecond;
     private Task task;
@@ -18,18 +18,19 @@ public class Session {
     public   Session() {
     }
 
-    public Session(UUID id, User playerFirst, User playerSecond, Task task) {
+    public Session(String id, User playerFirst, User playerSecond, Task task) {
         this.id = id;
         this.playerFirst = playerFirst;
         this.playerSecond = playerSecond;
         this.task = task;
+        this.sessionResult = new SessionResult(null, null);
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

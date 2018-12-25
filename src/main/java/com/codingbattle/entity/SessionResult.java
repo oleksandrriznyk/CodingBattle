@@ -4,9 +4,14 @@ public class SessionResult {
 
     private String firstPlayerLogin;
     private String secondPlayerLogin;
-    private double firstPlayerExecutionTime;
-    private double secondPlayerExecutionTime;
+    private Long firstPlayerExecutionTime;
+    private Long secondPlayerExecutionTime;
     private String winnerLogin;
+
+    public SessionResult(String firstPlayerLogin, String secondPlayerLogin) {
+        this.firstPlayerLogin = firstPlayerLogin;
+        this.secondPlayerLogin = secondPlayerLogin;
+    }
 
     public String getFirstPlayerLogin() {
         return firstPlayerLogin;
@@ -24,19 +29,19 @@ public class SessionResult {
         this.secondPlayerLogin = secondPlayerLogin;
     }
 
-    public double getFirstPlayerExecutionTime() {
+    public Long getFirstPlayerExecutionTime() {
         return firstPlayerExecutionTime;
     }
 
-    public void setFirstPlayerExecutionTime(double firstPlayerExecutionTime) {
+    public void setFirstPlayerExecutionTime(Long firstPlayerExecutionTime) {
         this.firstPlayerExecutionTime = firstPlayerExecutionTime;
     }
 
-    public double getSecondPlayerExecutionTime() {
+    public Long getSecondPlayerExecutionTime() {
         return secondPlayerExecutionTime;
     }
 
-    public void setSecondPlayerExecutionTime(double secondPlayerExecutionTime) {
+    public void setSecondPlayerExecutionTime(Long secondPlayerExecutionTime) {
         this.secondPlayerExecutionTime = secondPlayerExecutionTime;
     }
 

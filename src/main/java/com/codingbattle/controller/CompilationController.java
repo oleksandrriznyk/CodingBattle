@@ -6,13 +6,14 @@ import com.codingbattle.dto.TestResultDto;
 import com.codingbattle.entity.Task;
 import com.codingbattle.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/compilation")
+@RequestMapping("/problems/api/v1/compilation")
 public class CompilationController {
 
     @Autowired
