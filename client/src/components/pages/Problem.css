@@ -42,3 +42,48 @@
 .codeflask {
   border-radius: 6px;
 }
+
+.problem-tests {
+  margin-top: 24px;
+}
+
+.test {
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+
+
+
+
+
+
+.wait {
+  position: fixed;
+  top: 0;
+  bottom: 0!important;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+  background: rgba(255,255,255,0.8);
+  font-size: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url(https://loading.io/spinners/balls/lg.circle-slack-loading-icon.gif);
+  background-size: 400px 400px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.wait__button {
+  display: block;
+  padding: 8px 32px;
+  border: 2px solid #666;
+  margin-top: 24px;
+  text-align: center;
+  font-size: 70%;
+  cursor: pointer;
+  background: #fff;
+}
