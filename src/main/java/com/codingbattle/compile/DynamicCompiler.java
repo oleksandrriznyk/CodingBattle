@@ -36,6 +36,7 @@ public class DynamicCompiler {
     private static final String EXTENSION_CLASS = ".class";
     private static final String ERROR = "error";
     private static StringBuilder CODE_TEMPLATE = new StringBuilder("public class ");
+    private static String MESSAGE_COMPILATION_SUCCESS = "Compilation success";
 
     @Autowired
     private TypeManager typeManager;
@@ -201,7 +202,7 @@ public class DynamicCompiler {
             }
             File file = new File(classFile.toString());
             dto.setTestResultList(testResults);
-            dto.setStatus("OK");
+            dto.setStatus(MESSAGE_COMPILATION_SUCCESS);
             dto.setExecutionTime((after-before)*1000);
             Session session = sessionService.findOne(sessionId);
             User currentUser = securityService.getCurrentUser();

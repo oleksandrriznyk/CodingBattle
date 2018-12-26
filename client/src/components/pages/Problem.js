@@ -17,7 +17,8 @@ class Problem extends Component {
       time: 0,
       tests: {},
       endGame: false,
-      winner: ''
+      winner: '',
+      message: ''
     }
   }
 
@@ -85,7 +86,8 @@ class Problem extends Component {
     }).then( (data) => {
       console.log('Test', data);
       that.setState({
-        tests: data
+        tests: data,
+        message: data.status
       }, this.checkResults);
     });
   }
@@ -178,6 +180,7 @@ class Problem extends Component {
 
         <div className="problem-footer">
           <input className="problem-footer__submit" onClick={this.handleSubmitCode} type="button" value="Submit"/>
+          <p>{this.state.message}</p>
         </div>
 
       </section>
