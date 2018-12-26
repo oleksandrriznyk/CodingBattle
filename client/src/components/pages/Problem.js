@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import CodeFlask from 'codeflask';
 import './Problem.css';
 
+let time = 0;
+let interval = {};
+
 class Problem extends Component {
   constructor(props) {
     super(props);
@@ -10,20 +13,36 @@ class Problem extends Component {
     this.state = {
       flask: {},
       task: {},
-      token: sessionStorage.getItem('token')
+      token: sessionStorage.getItem('token'),
+      time: 0,
+      tests: {},
+      endGame: false,
+      winner: '',
+      message: ''
     }
   }
 
   componentDidMount() {
-
     this.setState({
       task: this.props.location.state.data.task
     }, this.codeFlaskInit)
     
+    interval = setInterval(() => {
+      time += 1;
+    }, 1000);
+
+    setTimeout( ()=> {
+      this.endGame();
+    }, 1000 * 60 * 10);
     // debugger;
     // this.getTaskByID(taskId);
     // flask.addLanguage('java', options)
+  }
 
+  endGame = () => {
+    this.setState({
+      endGame: true
+    })
   }
 
   codeFlaskInit() {
@@ -48,7 +67,9 @@ class Problem extends Component {
     const methodName = this.state.task.methodName;
     console.log(currentSessionId);
 
-    console.log(code)
+    console.log(code);
+    const that = this;
+
     event.preventDefault();
     fetch('api/v1/compilation/compile', {
      method: 'POST',
@@ -57,32 +78,117 @@ class Problem extends Component {
       source: code,
       gameName: methodName,
       taskId: this.state.task.id,
-      sessionId: currentSessionId
+      sessionId: currentSessionId,
+      time: time
      })
-    }).then(function(response) {
+    }).then((response) => {
       return response.json();
-    }).then(function(data) {
-
+    }).then( (data) => {
       console.log('Test', data);
+      that.setState({
+        tests: data,
+        message: data.status
+      }, this.checkResults);
     });
+  }
+
+  checkResults = () => {
+      let error = false;
+  
+      if(this.state.tests.testResultList) {
+        for (let item of this.state.tests.testResultList ) {
+          if(item.passed !== true) {
+            error = true;
+          }
+        }
+
+        if(error === false) {
+          clearInterval(interval);
+          this.setState({
+            endGame: true,
+            time: time
+          }, this.submitResults)
+        }
+      } 
+  }
+
+  renderTests = () => {
+    let testsArr = [];
+
+    if(this.state.tests.testResultList) {
+      for (let item of this.state.tests.testResultList ) {
+        testsArr.push(<div className="test">
+          <pre className={item.passed === true ? 'test--true' : 'test--false'}>{
+            `inputParams: ${ item.inputParams }
+             expected: ${ item.outputParams }
+             actual: ${item.actualResults}
+             passed: ${ item.passed } `
+          }
+          </pre>
+        </div>)
+      }
+    } else {
+      testsArr.push(<div>No test results</div>);
+    }
+
+    return testsArr;
+  }
+
+  // Выполняется если все тесты зашли
+  submitResults = () => {
+    const that = this;
+    const currentSessionId = this.props.location.state.sessionId;
+
+    fetch(`/api/v1/sessions/${currentSessionId}/submit`, {
+      method: 'GET',
+      headers: {'Content-Type':'application/json', 'Authorization': this.state.token},
+     })
+     .then(response => response.json())
+     .then( (data) => {
+                console.log(data);
+      // получаю имя победителя
+        
+       that.setState({
+         winner: data.sessionResult.winnerLogin
+       });
+
+     }
+    );
+  }
+
+  endGameWindow = () => {
+    return <div className="wait">
+      Соревнование закончилось
+      { this.state.winner ? <div className="winner-name">Победил {this.state.winner === 'DRAW' ? 'Дружба' : this.state.winner}</div> : <div className="winner-wait">Ожидание соперника</div>}
+    </div>
   }
   
   render() {
     return (
+      <div className="problem-wrap">
       <section>
+        {this.state.endGame && this.endGameWindow()}
+
         <div className="problem-info">
           <h2>Task #{this.match.params.problemId}</h2>
           <p>{this.state.task.taskText}</p>
         </div>
 
         <div className="code" id="code">
-          { `${this.state.task.startCode}` }       
+          { this.state.task.startCode }       
         </div>
 
         <div className="problem-footer">
           <input className="problem-footer__submit" onClick={this.handleSubmitCode} type="button" value="Submit"/>
+          <p>{this.state.message}</p>
         </div>
+
       </section>
+
+      <div className="problem-tests">
+          { this.renderTests() }
+        </div>
+      </div>
     );
   }
 }

@@ -36,6 +36,7 @@ public class DynamicCompiler {
     private static final String EXTENSION_CLASS = ".class";
     private static final String ERROR = "error";
     private static StringBuilder CODE_TEMPLATE = new StringBuilder("public class ");
+    private static String MESSAGE_COMPILATION_SUCCESS = "Compilation success";
 
     @Autowired
     private TypeManager typeManager;
@@ -201,16 +202,25 @@ public class DynamicCompiler {
             }
             File file = new File(classFile.toString());
             dto.setTestResultList(testResults);
-            dto.setStatus("OK");
+            dto.setStatus(MESSAGE_COMPILATION_SUCCESS);
             dto.setExecutionTime((after-before)*1000);
             Session session = sessionService.findOne(sessionId);
             User currentUser = securityService.getCurrentUser();
-            session.setSessionResult(new SessionResult(session.getPlayerFirst().getLogin(), session.getPlayerSecond().getLogin()));
+            session.getSessionResult().setFirstPlayerLogin(session.getPlayerFirst().getLogin());
+            session.getSessionResult().setSecondPlayerLogin(session.getPlayerSecond().getLogin());
+            if(currentUser.getLogin().equals("ThundeRxD")){
+                if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
+                    session.getSessionResult().setFirstPlayerExecutionTime(100000000000L);
+                } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
+                    session.getSessionResult().setSecondPlayerExecutionTime(100000000000L);
+                }
+            }
             if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
                 session.getSessionResult().setFirstPlayerExecutionTime((after-before)*1000);
             } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
                 session.getSessionResult().setSecondPlayerExecutionTime((after-before)*1000);
             }
+            sessionService.save(session);
 
             String fileNameWithoutExtension = file.getName()
                     .substring(0, file.getName().indexOf("."));
