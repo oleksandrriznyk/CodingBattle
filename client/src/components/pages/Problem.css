@@ -125,10 +125,18 @@
   white-space: normal;
 }
 
+.test--true:before{
+    content: "\2714";
+}
+
 .test--false {
   border-radius: 5px;
   padding: 14px;
   background: rgb(255, 228, 228);
   word-break: break-word;
   white-space: normal;
+}
+
+.test--false:before{
+    content: "\2716"
 }

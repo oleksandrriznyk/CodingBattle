@@ -1,6 +1,7 @@
 package com.codingbattle.service;
 
 import com.codingbattle.entity.Session;
+import com.codingbattle.entity.User;
 
 import java.util.List;
 
@@ -16,4 +17,8 @@ public interface SessionService {
     List<Session> findAll();
 
     void deleteAll();
+
+    List<Session> findFinishedByUser(User user);
+
+    List<Session> getAll();
 }

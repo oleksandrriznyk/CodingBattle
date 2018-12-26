@@ -14,4 +14,8 @@ public interface SessionRepository extends MongoRepository<Session, String> {
 
     @Query("{ 'playerSecond': ?0}")
     List<Session> findAllWithOnePlayer(User playerSecond);
+
+    List<Session> findByPlayerFirst(User user);
+
+    List<Session> findByPlayerSecond(User user);
 }

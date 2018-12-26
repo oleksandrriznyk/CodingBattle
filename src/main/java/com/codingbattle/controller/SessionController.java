@@ -1,9 +1,11 @@
 package com.codingbattle.controller;
 
+import com.codingbattle.dto.SessionResultDto;
 import com.codingbattle.entity.Session;
 import com.codingbattle.entity.SessionResult;
 import com.codingbattle.entity.Task;
 import com.codingbattle.entity.User;
+import com.codingbattle.entity.enums.SessionWinnerState;
 import com.codingbattle.security.service.SecurityService;
 import com.codingbattle.service.SessionService;
 import com.codingbattle.service.TaskService;
@@ -21,6 +23,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/sessions")
@@ -139,5 +142,22 @@ public class SessionController {
         sessionService.deleteAll();
     }
 
-
+    @GetMapping("/finished")
+    public List<SessionResultDto> getSessionByLogin(){
+        User user = securityService.getCurrentUser();
+        List<Session> sessions = sessionService.findFinishedByUser(user);
+        return sessions.stream().map(s->{
+            SessionResultDto dto = new SessionResultDto();
+            dto.setPlayerFirstLogin(s.getPlayerFirst().getLogin());
+            dto.setPlayerSecondLogin(s.getPlayerSecond().getLogin());
+            if(s.getSessionResult().getWinnerLogin().equals(user.getLogin())){
+                dto.setIsWinner(SessionWinnerState.WIN.toString());
+            } else if(s.getSessionResult().getWinnerLogin().equals("DRAW")){
+                dto.setIsWinner(SessionWinnerState.DRAW.toString());
+            } else {
+                dto.setIsWinner(SessionWinnerState.LOSE.toString());
+            }
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }

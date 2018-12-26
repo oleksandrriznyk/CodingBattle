@@ -117,12 +117,10 @@ class Problem extends Component {
       for (let item of this.state.tests.testResultList ) {
         testsArr.push(<div className="test">
           <pre className={item.passed === true ? 'test--true' : 'test--false'}>{
-            `actualResults: ${item.actualResults}
-id: ${ item.id }
-inputParams: ${ item.inputParams }
-outputParams: ${ item.outputParams }
-passed: ${ item.passed } `
-
+            `inputParams: ${ item.inputParams }
+             expected: ${ item.outputParams }
+             actual: ${item.actualResults}
+             passed: ${ item.passed } `
           }
           </pre>
         </div>)
