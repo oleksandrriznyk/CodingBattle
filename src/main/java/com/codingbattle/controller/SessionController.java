@@ -55,7 +55,6 @@ public class SessionController {
         Session session = sessionService.save(new Session(sessionId.toString(), playerOne, null, task));
         playersSync.addSession(sessionId.toString(), unconnectedSession);
         unconnectedSession.onCompletion(() -> ResponseEntity.ok(session));
-
         return unconnectedSession;
     }
 
@@ -95,7 +94,8 @@ public class SessionController {
 
     @GetMapping("/connectByLogin")
     public DeferredResult<ResponseEntity<?>> conncetByLogin(@RequestParam("login") String login) {
-        Session session = sessionService.findAllWithOnePlayer().stream().filter(s -> s.getPlayerFirst().getLogin().equals(login)).findFirst().get();
+        Session session = sessionService.findAllWithOnePlayer().stream().filter(s ->
+                s.getPlayerFirst().getLogin().equals(login)).findFirst().get();
 
         DeferredResult deferredResult = playersSync.getSession(session.getId());
         if (deferredResult != null) {

@@ -12,8 +12,8 @@ import java.util.Map;
 @Component
 public class PlayersSync {
 
-    Map<String, DeferredResult<ResponseEntity<?>>> unconnected;
-    Map<String, DeferredResult<ResponseEntity<Session>>> sessionResult;
+    private Map<String, DeferredResult<ResponseEntity<?>>> unconnected;
+    private Map<String, DeferredResult<ResponseEntity<Session>>> sessionResult;
 
     @PostConstruct
     private void init(){

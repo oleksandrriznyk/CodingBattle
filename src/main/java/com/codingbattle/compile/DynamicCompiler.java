@@ -53,24 +53,8 @@ public class DynamicCompiler {
     @Autowired
     private SessionService sessionService;
 
-    private String readCode(String sourcePath) throws FileNotFoundException {
-        InputStream stream = new FileInputStream(sourcePath);
-        String result;
-        try {
-            String separator = System.getProperty(LINE_SEPARATOR);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            result = reader.lines().collect(Collectors.joining(separator));
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException e) {
-            }
-        }
-        return result;
-    }
-
     private Path saveSource(String source, String gameName, Task task, String currentUserLogin) throws IOException {
-        Path sourcePath = Paths.get(TEMP_DIR, gameName+currentUserLogin + EXTENSION_JAVA);
+        Path sourcePath = Paths.get(TEMP_DIR, gameName + currentUserLogin + EXTENSION_JAVA);
         StringBuilder imports = importManager.getImports().get(task.getId());
         generateSource(sourcePath, gameName, source, imports, currentUserLogin);
         return sourcePath;
@@ -81,12 +65,13 @@ public class DynamicCompiler {
                                 String source,
                                 StringBuilder imports,
                                 String currentUserLogin) throws IOException {
+
         StringBuilder sourceCode = new StringBuilder(CODE_TEMPLATE);
         sourceCode.append(gameName).append(currentUserLogin)
                 .append("{")
                 .append(source)
                 .append("}");
-        if(imports!=null){
+        if (imports != null) {
             sourceCode.insert(0, imports);
         }
         Files.write(sourcePath, sourceCode.toString().getBytes(UTF_8),
@@ -98,8 +83,7 @@ public class DynamicCompiler {
         String fileName = javaFile.toFile().getPath();
         PrintStream out = new PrintStream(
                 new FileOutputStream(
-                        fileName.substring(0, fileName.indexOf(".")) + EXTENSION_TXT),
-                true);
+                        fileName.substring(0, fileName.indexOf(".")) + EXTENSION_TXT), true);
         System.setErr(out);
         int result = compiler.run(null, null, null,
                 javaFile.toFile().getAbsolutePath());
@@ -112,8 +96,7 @@ public class DynamicCompiler {
             return programResult;
         } else {
             return new String(Files.readAllBytes(
-                    Paths.get(fileName.substring(0, fileName.indexOf("."))
-                            + EXTENSION_TXT)));
+                    Paths.get(fileName.substring(0, fileName.indexOf(".")) + EXTENSION_TXT)));
         }
     }
 
@@ -137,20 +120,21 @@ public class DynamicCompiler {
                           Method shouldBeRanMethod,
                           Class inputParameterType,
                           Class<?> clazz,
-                          List<TestResult> testResults){
-        for (int i = 0; i < testList.size(); i++) {
+                          List<TestResult> testResults) {
+
+        for (Test aTestList : testList) {
             String result;
             try {
                 result = shouldBeRanMethod.invoke(clazz.newInstance(),
-                        (Object) parseService.parse(testList.get(i).getInputParams(),
+                        (Object) parseService.parse(aTestList.getInputParams(),
                                 inputParameterType)).toString();
 
-                TestResult testResult = new TestResult(testList.get(i));
+                TestResult testResult = new TestResult(aTestList);
                 testResult.setActualResults(result);
                 testResults.add(testResult);
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
                 result = e.getMessage();
-                TestResult testResult = new TestResult(testList.get(i));
+                TestResult testResult = new TestResult(aTestList);
                 testResult.setActualResults(result);
                 testResults.add(testResult);
             }
@@ -170,8 +154,8 @@ public class DynamicCompiler {
     public TestResultDto doEvil(String source, String gameName, Task task, String sessionId) throws Exception {
         String currentUserLogin = securityService.getCurrentUser().getLogin();
         Path javaFile = saveSource(source, gameName, task, currentUserLogin);
-        String str = compileSource(javaFile, gameName+currentUserLogin);
-        return parseResult(str, gameName+currentUserLogin, javaFile, task, sessionId);
+        String str = compileSource(javaFile, gameName + currentUserLogin);
+        return parseResult(str, gameName + currentUserLogin, javaFile, task, sessionId);
     }
 
     private TestResultDto parseResult(String input,
@@ -179,20 +163,20 @@ public class DynamicCompiler {
                                       Path javaFile,
                                       Task task,
                                       String sessionId) throws Exception {
+
         TestResultDto dto = new TestResultDto();
         if (input.contains(ERROR)) {
             String result;
             result = input.substring(input.indexOf(ERROR));
             result = result.replaceAll("(location: [^\n]*)", "");
             dto.setStatus(result);
-
         } else {
             Path classFile = Paths.get(compileSource(javaFile, gameName));
-            long before=0L;
-            long after=0L;
+            long before = 0L;
+            long after = 0L;
             List<TestResult> testResults = new ArrayList<>();
-            for(int i=0;i<2;i++){
-                if(i==1){
+            for (int i = 0; i < 2; i++) {
+                if (i == 1) {
                     before = System.currentTimeMillis();
                     testResults = runClass(classFile, gameName, task);
                     after = System.currentTimeMillis();
@@ -203,22 +187,15 @@ public class DynamicCompiler {
             File file = new File(classFile.toString());
             dto.setTestResultList(testResults);
             dto.setStatus(MESSAGE_COMPILATION_SUCCESS);
-            dto.setExecutionTime((after-before)*1000);
+            dto.setExecutionTime((after - before) * 1000);
             Session session = sessionService.findOne(sessionId);
             User currentUser = securityService.getCurrentUser();
             session.getSessionResult().setFirstPlayerLogin(session.getPlayerFirst().getLogin());
             session.getSessionResult().setSecondPlayerLogin(session.getPlayerSecond().getLogin());
-            if(currentUser.getLogin().equals("ThundeRxD")){
-                if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
-                    session.getSessionResult().setFirstPlayerExecutionTime(100000000000L);
-                } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
-                    session.getSessionResult().setSecondPlayerExecutionTime(100000000000L);
-                }
-            }
-            if(session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())){
-                session.getSessionResult().setFirstPlayerExecutionTime((after-before)*1000);
-            } else if(session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())){
-                session.getSessionResult().setSecondPlayerExecutionTime((after-before)*1000);
+            if (session.getSessionResult().getFirstPlayerLogin().equals(currentUser.getLogin())) {
+                session.getSessionResult().setFirstPlayerExecutionTime((after - before) * 1000);
+            } else if (session.getSessionResult().getSecondPlayerLogin().equals(currentUser.getLogin())) {
+                session.getSessionResult().setSecondPlayerExecutionTime((after - before) * 1000);
             }
             sessionService.save(session);
 
@@ -228,7 +205,6 @@ public class DynamicCompiler {
         }
         return dto;
     }
-
 
     private void deleteFiles(String fileNameWithoutExtension) throws IOException {
         File javaFile = new File(TEMP_DIR + "/" + fileNameWithoutExtension +
